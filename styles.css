@@ -380,6 +380,13 @@ a:hover {
   font-weight: 600;
 }
 
+.pub-authors.equal-contribution {
+  font-style: italic;
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: -4px;
+}
+
 .pub-venue {
   font-size: 14px;
   color: var(--link-color);
