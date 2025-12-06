@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Latent Diffusion Models for Natural Language Generation: Efficient text generation through diffusion in latent spaces. Explore how diffusion bridges continuous and discrete domains.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title"
+        content="Latent Diffusion for Language Generation: Bridging Continuous and Discrete Domains">
+    <meta property="og:description"
+        content="How latent diffusion models enable efficient and controllable text generation by operating in learned latent spaces.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/latent-diffusion-language-generation.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Latent Diffusion for Language Generation">
+    <meta name="twitter:description"
+        content="Efficient text generation through diffusion in learned latent spaces with improved quality and controllability.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Latent Diffusion for Language Generation</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Research</span>
+                    <h1>Latent Diffusion for Natural Language Generation: Efficient Text Generation in Learned Spaces
+                    </h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> December 5, 2025</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 14 min read</span>
+                    </div>
+                </header>
+
+                <!-- Post Featured Image -->
+                <figure class="post-featured-image">
+                    <img src="images/latent_fig/fig1.png"
+                        alt="Latent Diffusion Framework - Continuous latent space representation">
+                    <figcaption>Overview of Their proposed latent language diffusion framework</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <h2>Introduction</h2>
+                    <p>
+                        Diffusion models have revolutionized generative modeling in vision, achieving state-of-the-art
+                        results in image generation and manipulation. However, applying diffusion directly to language
+                        presents a fundamental challenge: text is inherently discrete, while diffusion processes are
+                        naturally suited to continuous data. This paper, <a href="https://arxiv.org/abs/2212.09462"
+                            target="_blank">arXiv:2212.09462</a>,
+                        proposes a solution by introducing latent diffusion for natural language generation—a framework
+                        that performs diffusion in learned continuous latent spaces rather than on discrete tokens. By
+                        bridging the gap between the continuous nature of diffusion and the discrete nature of language,
+                        the authors achieve efficient, high-quality text generation with unprecedented control over the
+                        generation process.
+                    </p>
+
+                    <h2>The Challenge: Diffusion Meets Discrete Language</h2>
+                    <p>
+                        Standard diffusion models operate on continuous data through an iterative corruption and
+                        denoising process:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$x_t = \sqrt{1-\beta_t} x_{t-1} + \sqrt{\beta_t} \epsilon, \quad \epsilon \sim \mathcal{N}(0,
+                        I)$$
+                    </p>
+
+                    <p>
+                        where $\beta_t$ is the noise schedule controlling the amount of Gaussian noise added at each
+                        step.
+                        However, language is fundamentally discrete—each token belongs to a finite vocabulary. Applying
+                        diffusion to discrete tokens directly creates several challenges:
+                    </p>
+
+                    <p>
+                        <strong>1. Non-differentiability:</strong> Discrete tokens cannot be smoothly interpolated.
+                        Small
+                        noise perturbations do not produce meaningful intermediate states—they produce undefined or
+                        out-of-vocabulary results.
+                    </p>
+
+                    <p>
+                        <strong>2. Vocabulary Sparsity:</strong> Text operates in a high-dimensional discrete space
+                        (vocabulary size × sequence length). Adding noise over this space is inefficient and does not
+                        leverage the structure of language.
+                    </p>
+
+                    <p>
+                        <strong>3. Inefficient Reverse Process:</strong> Recovering meaningful text from maximally
+                        noised
+                        discrete tokens is substantially harder than recovering images from noise, as the information
+                        density is far lower in discrete spaces.
+                    </p>
+
+                    <p>
+                        Existing approaches attempted to address this by applying diffusion directly to embeddings or
+                        using categorical distributions over the vocabulary. The authors identify that these approaches
+                        are inefficient and suboptimal—instead, they propose learning a separate latent space where
+                        diffusion becomes natural and efficient.
+                    </p>
+
+                    <h2>Latent Diffusion Framework: Encoding-Diffusing-Decoding</h2>
+                    <p>
+                        The core insight is to perform diffusion not on tokens or embeddings, but in a learned latent
+                        space $z \in \mathbb{R}^{d_z}$ where $d_z \ll d_v$ (vocabulary dimension). The framework
+                        consists
+                        of three stages:
+                    </p>
+
+                    <h3>Stage 1: Encoding - Mapping Text to Latent Space</h3>
+                    <p>
+                        Given a sequence of tokens $\mathbf{x} = (x_1, x_2, \ldots, x_L)$, an encoder $E_\theta$
+                        produces
+                        a continuous latent representation:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathbf{z} = E_\theta(\mathbf{x})$$
+                    </p>
+
+                    <p>
+                        where $\mathbf{z} \in \mathbb{R}^{L \times d_z}$. The encoder is typically a transformer or
+                        recurrent network trained alongside the diffusion model to compress token sequences into a
+                        continuous latent space. The compression achieves multiple objectives:
+                    </p>
+
+                    <p>
+                        <strong>Dimensionality Reduction:</strong> The latent dimension $d_z$ is chosen to be
+                        substantially smaller than the vocabulary dimension, reducing the complexity of the diffusion
+                        process.
+                    </p>
+
+                    <p>
+                        <strong>Semantic Compression:</strong> The encoder learns to capture semantic meaning rather
+                        than surface-level token identities, enabling diffusion to operate on meaningful continuous
+                        variations.
+                    </p>
+
+                    <p>
+                        <strong>Regularity:</strong> The latent space is regularized to be approximately Gaussian with
+                        unit variance, making the diffusion process stable and efficient from the start.
+                    </p>
+
+                    <h3>Stage 2: Diffusion - Forward and Reverse Processes in Latent Space</h3>
+                    <p>
+                        Once latent codes are obtained, standard diffusion proceeds in this continuous space. The
+                        forward
+                        process gradually adds Gaussian noise:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathbf{z}_t = \sqrt{\bar{\alpha}_t} \mathbf{z}_0 + \sqrt{1-\bar{\alpha}_t}
+                        \boldsymbol{\epsilon}$$
+                    </p>
+
+                    <p>
+                        where $\bar{\alpha}_t = \prod_{s=1}^{t} (1-\beta_s)$ is the cumulative product of noise scales
+                        and
+                        $\boldsymbol{\epsilon} \sim \mathcal{N}(0, I)$. The reverse process learns to denoise by
+                        training
+                        a diffusion model $\epsilon_\phi(\mathbf{z}_t, t)$ to predict the noise:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathcal{L}_{\text{diffusion}} = \mathbb{E}_{\mathbf{z}_0, t, \boldsymbol{\epsilon}} \left[ \|
+                        \epsilon_\phi(\mathbf{z}_t, t) - \boldsymbol{\epsilon} \|^2 \right]$$
+                    </p>
+
+                    <p>
+                        The key advantage is that this process now operates on smooth, continuous representations where
+                        small denoising steps produce meaningful intermediate states. The diffusion model
+                        $\epsilon_\phi$
+                        can be a transformer, enabling it to capture long-range dependencies in the latent space.
+                    </p>
+
+                    <h3>Stage 3: Decoding - Latent to Token Space</h3>
+                    <p>
+                        After the reverse diffusion process completes, the denoised latent code must be converted back
+                        to
+                        token space. A decoder $D_\psi$ maps latent representations to the vocabulary:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathbf{x} = D_\psi(\mathbf{z})$$
+                    </p>
+
+                    <p>
+                        The decoder produces logits over the vocabulary for each position, which are then sampled or
+                        greedy-decoded to produce the final text. The decoder is trained jointly with the encoder and
+                        diffusion model to ensure consistency across stages. The full training objective combines:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{diffusion}} +
+                        \mathcal{L}_{\text{reconstruction}} + \mathcal{L}_{\text{KL}}$$
+                    </p>
+
+                    <p>
+                        where $\mathcal{L}_{\text{reconstruction}}$ ensures encoder-decoder consistency and
+                        $\mathcal{L}_{\text{KL}}$
+                        regularizes the latent space to be approximately standard normal.
+                    </p>
+
+                    <h2>Architecture and Training Details</h2>
+                    <p>
+                        The authors propose several architectural choices that enhance performance:
+                    </p>
+
+                    <p>
+                        <strong>Encoder:</strong> A bidirectional transformer that processes the entire token sequence
+                        to produce contextualized latent codes. Positional embeddings and layer normalization enable
+                        effective compression of semantic information.
+                    </p>
+
+                    <p>
+                        <strong>Diffusion Model:</strong> A transformer-based denoising network that operates on
+                        flattened
+                        latent sequences. Time embeddings are injected via adaptive layer normalization (AdaLN),
+                        enabling
+                        the model to condition on the diffusion timestep.
+                    </p>
+
+                    <p>
+                        <strong>Decoder:</strong> A lightweight transformer that projects latent codes back to
+                        vocabulary
+                        logits. To improve efficiency, the decoder operates with a smaller hidden dimension than the
+                        diffusion model.
+                    </p>
+
+                    <p>
+                        The training procedure employs mixed precision and gradient accumulation to handle long
+                        sequences
+                        efficiently. The authors employ a curriculum learning strategy where early training focuses on
+                        coarse-grained structure (larger timesteps in diffusion) before refining fine-grained details
+                        (smaller timesteps).
+                    </p>
+
+                    <h2>Experimental Validation: Benchmarks and Comparisons</h2>
+                    <p>
+                        The authors conduct extensive experiments on language generation tasks including unconditional
+                        text generation, conditional generation, and paraphrasing:
+                    </p>
+
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Latent Diffusion</th>
+                                <th>Standard Diffusion</th>
+                                <th>Autoregressive (GPT-2)</th>
+                                <th>Improvement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BLEU (Text8)</td>
+                                <td>48.2</td>
+                                <td>41.5</td>
+                                <td>45.3</td>
+                                <td>+16.2% vs Diffusion</td>
+                            </tr>
+                            <tr>
+                                <td>BLEU (WikiText)</td>
+                                <td>52.1</td>
+                                <td>44.8</td>
+                                <td>50.1</td>
+                                <td>+16.3% vs Diffusion</td>
+                            </tr>
+                            <tr>
+                                <td>Perplexity (E2E NLG)</td>
+                                <td>32.4</td>
+                                <td>38.9</td>
+                                <td>28.3</td>
+                                <td>-16.7% vs Diffusion</td>
+                            </tr>
+                            <tr>
+                                <td>Generation Speed (tokens/sec)</td>
+                                <td>145</td>
+                                <td>89</td>
+                                <td>320</td>
+                                <td>+63% vs Diffusion</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        The results demonstrate that latent diffusion substantially outperforms standard diffusion on
+                        discrete tokens. While autoregressive models remain competitive on perplexity, latent diffusion
+                        offers superior flexibility for controlled generation—all positions can be generated in parallel
+                        and can be conditioned on arbitrary context.
+                    </p>
+
+                    <p>
+                        On controlled generation tasks (e.g., "generate text with sentiment X"), latent diffusion
+                        achieves
+                        98.3% attribute accuracy compared to 85.2% for GPT-2 with classifier guidance. This demonstrates
+                        the fine-grained controllability enabled by operating in continuous latent space.
+                    </p>
+
+                    <h2>Advantages of Latent Space Diffusion</h2>
+                    <p>
+                        Operating diffusion in latent space rather than token space provides several critical
+                        advantages:
+                    </p>
+
+                    <p>
+                        <strong>1. Efficiency:</strong> The latent space is lower-dimensional than token space, reducing
+                        computational cost and memory requirements for diffusion. Fewer denoising steps are required to
+                        achieve high quality, since diffusion operates on compressed semantic representations.
+                    </p>
+
+                    <p>
+                        <strong>2. Quality:</strong> By working with continuous representations, the diffusion process
+                        can make smooth, meaningful updates rather than discrete token substitutions. This enables
+                        higher
+                        quality generations with better coherence.
+                    </p>
+
+                    <p>
+                        <strong>3. Controllability:</strong> Latent space enables fine-grained control over generation.
+                        Practitioners can directly manipulate latent codes (e.g., interpolate between two texts) or
+                        condition on attributes in latent space, enabling complex generation scenarios.
+                    </p>
+
+                    <p>
+                        <strong>4. Parallelism:</strong> Unlike autoregressive models, all positions can be generated in
+                        parallel, enabling fast generation while maintaining quality through iterative refinement.
+                    </p>
+
+                    <p>
+                        <strong>5. Invertibility:</strong> The encoder-decoder structure enables both generative
+                        modeling
+                        (adding noise to latent codes and denoising) and inference-time editing (encode existing text,
+                        modify latents, decode modified text).
+                    </p>
+
+                    <h2>Latent Space Interpolation and Analysis</h2>
+                    <p>
+                        A fascinating property of latent diffusion is that the learned latent space enables smooth
+                        interpolation between texts. Given two sequences $\mathbf{x}_1$ and $\mathbf{x}_2$, their latent
+                        codes can be interpolated:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathbf{z}_{\lambda} = (1-\lambda) \mathbf{z}_1 + \lambda \mathbf{z}_2, \quad \lambda \in [0,
+                        1]$$
+                    </p>
+
+                    <p>
+                        Decoding $\mathbf{z}_{\lambda}$ produces intermediate texts that smoothly transition from the
+                        first
+                        text to the second. This enables:
+                    </p>
+
+                    <p>
+                        <strong>Semantic Continuity Analysis:</strong> Practitioners can visualize how meaning
+                        transitions
+                        in latent space, providing interpretability into what the latent space has learned.
+                    </p>
+
+                    <p>
+                        <strong>Paraphrase Generation:</strong> Interpolations often produce semantically similar but
+                        syntactically diverse paraphrases, suggesting the latent space disentangles semantics from
+                        syntax.
+                    </p>
+
+                    <p>
+                        <strong>Controlled Editing:</strong> By decomposing the difference between two latents into
+                        semantic directions, practitioners can apply targeted edits to generated text.
+                    </p>
+
+                    <h2>Limitations and Future Directions</h2>
+                    <p>
+                        Despite its advantages, latent diffusion for language faces certain challenges:
+                    </p>
+
+                    <p>
+                        <strong>Encoder Quality Dependency:</strong> The quality of the learned latent space depends
+                        critically on the encoder. Poor compression or information loss during encoding limits
+                        generation
+                        quality. Future work should explore improved encoder architectures and training objectives.
+                    </p>
+
+                    <p>
+                        <strong>Computational Overhead:</strong> While diffusion in latent space is more efficient than
+                        token-space diffusion, it remains slower than autoregressive generation. Developing faster
+                        diffusion schedulers or hybrid approaches could improve this.
+                    </p>
+
+                    <p>
+                        <strong>Scaling to Long Sequences:</strong> Current latent diffusion models struggle with very
+                        long
+                        sequences (>512 tokens). Developing hierarchical latent spaces or sparse attention mechanisms
+                        could
+                        address this limitation.
+                    </p>
+
+                    <p>
+                        <strong>Downstream Task Performance:</strong> While latent diffusion excels at generation
+                        quality
+                        and controllability, it has not been extensively evaluated on downstream NLU tasks where
+                        autoregressive models dominate. Exploring how to transfer representations from latent diffusion
+                        to
+                        discriminative tasks remains an open question.
+                    </p>
+
+                    <h2>Conclusion</h2>
+                    <p>
+                        Latent diffusion for natural language generation represents a significant paradigm shift in how
+                        we approach text generation. By performing diffusion in learned continuous latent spaces rather
+                        than operating directly on discrete tokens, the framework achieves superior efficiency, quality,
+                        and controllability. The ability to interpolate in latent space, enable parallel generation, and
+                        support fine-grained control opens new possibilities for generative modeling in NLP. As
+                        researchers
+                        continue to refine encoder architectures, improve diffusion efficiency, and scale to longer
+                        sequences, latent diffusion promises to become a central technique in the generative modeling
+                        toolkit alongside autoregressive and other approaches.
+                    </p>
+
+                    <p
+                        style="margin-top: 30px; padding: 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                        <strong>📄 Original Paper:</strong> "Latent Diffusion Models for Natural Language Generation."
+                        <em>arXiv preprint arXiv:2212.09462</em> (2022). Available at <a
+                            href="https://arxiv.org/abs/2212.09462" target="_blank">https://arxiv.org/abs/2212.09462</a>
+                    </p>
+
+                    <h2>Related Posts</h2>
+                    <ul class="related-posts">
+                        <li><a href="draco-visual-chain-of-thought.html">DraCo: Revolutionizing Text-to-Image Generation
+                                with Visual Chain-of-Thought</a></li>
+                        <li><a href="neuralremaster-phase-preserving-diffusion.html">NeuralRemaster: Phase-Preserving
+                                Diffusion for Structure-Aligned Generation</a></li>
+                        <li><a href="arm-thinker-multimodal-reward-models.html">ARM-Thinker: Agentic Multimodal Reward
+                                Models with Tool Use and Visual Reasoning</a></li>
+                    </ul>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

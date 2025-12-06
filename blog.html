@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Blog - Adele Chinda. Thoughts on machine learning, AI research, and computational science.">
+    <meta name="keywords"
+        content="Blog, Machine Learning, AI Research, LLM Agents, Diffusion Models, Embodied Agents, Research">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blog - Adele Chinda">
+    <meta property="og:description" content="Thoughts on machine learning, AI research, and computational science.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/blog.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog - Adele Chinda">
+    <meta name="twitter:description" content="Thoughts on machine learning, AI research, and computational science.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Blog - Adele Chinda</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link active">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG HEADER -->
+            <section class="blog-header">
+                <h1>Blog</h1>
+                <p>Thoughts on machine learning, AI research, and computational science.</p>
+            </section>
+
+            <!-- BLOG FILTER -->
+            <div class="blog-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="multimodality">Multimodality</button>
+                <button class="filter-btn" data-filter="diffusion">Diffusion</button>
+            </div>
+
+            <!-- BLOG GRID -->
+            <section class="blog-grid">
+                <!-- Blog Card 1 -->
+                <a href="draco-visual-chain-of-thought.html" class="blog-card-link">
+                    <article class="blog-card" data-category="multimodality diffusion">
+                        <img src="images/draco_fig/main.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Multimodality, Diffusion</div>
+                            <h3>DraCo: Revolutionizing Text-to-Image Generation with Visual Chain-of-Thought</h3>
+                            <p class="blog-date">December 6, 2025</p>
+                            <p class="blog-excerpt">An in-depth analysis of how Draft-as-CoT achieves +8% improvement on
+                                GenEval through visual chain-of-thought planning for improved text-to-image generation.
+                            </p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 2 -->
+                <a href="neuralremaster-phase-preserving-diffusion.html" class="blog-card-link">
+                    <article class="blog-card" data-category="diffusion">
+                        <img src="images/neural_fig/fig1.png" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Diffusion</div>
+                            <h3>NeuralRemaster: Phase-Preserving Diffusion for Structure-Aligned Generation</h3>
+                            <p class="blog-date">December 4, 2025</p>
+                            <p class="blog-excerpt">An in-depth exploration of phase-preserving diffusion mechanisms
+                                that maintain spatial structure while enabling flexible content generation for
+                                re-rendering and sim-to-real transfer.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 3 -->
+                <a href="arm-thinker-multimodal-reward-models.html" class="blog-card-link">
+                    <article class="blog-card" data-category="multimodality">
+                        <img src="images/arm_fig/fig1.png" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Multimodality</div>
+                            <h3>ARM-Thinker: Agentic Multimodal Reward Models with Tool Use and Visual Reasoning</h3>
+                            <p class="blog-date">December 4, 2025</p>
+                            <p class="blog-excerpt">How agentic tool use and visual reasoning enable +16.2% improvement
+                                on reward modeling benchmarks for vision-language alignment.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 4 -->
+                <a href="latent-diffusion-language-generation.html" class="blog-card-link">
+                    <article class="blog-card" data-category="diffusion">
+                        <img src="images/latent_fig/main.png" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Diffusion</div>
+                            <h3>Latent Diffusion for Natural Language Generation: Efficient Text in Learned Spaces</h3>
+                            <p class="blog-date">October 17, 2025</p>
+                            <p class="blog-excerpt">How latent diffusion models enable efficient and controllable text
+                                generation by operating diffusion in learned continuous latent spaces.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 5 -->
+                <a href="blog-post-2.html" class="blog-card-link">
+                    <article class="blog-card" data-category="multimodality">
+                        <img src="images/El.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Multimodality</div>
+                            <h3>Getting Started with Weights & Biases for ML Tracking</h3>
+                            <p class="blog-date">November 28, 2025</p>
+                            <p class="blog-excerpt">A practical guide to setting up and using W&B for experiment
+                                tracking,
+                                visualization, and collaboration in machine learning projects.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 6 -->
+                <a href="blog-post-3.html" class="blog-card-link">
+                    <article class="blog-card" data-category="diffusion">
+                        <img src="images/El.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Diffusion</div>
+                            <h3>The Role of Diffusion Models in Generative AI</h3>
+                            <p class="blog-date">November 15, 2025</p>
+                            <p class="blog-excerpt">Exploring the evolution of diffusion models and their growing
+                                importance
+                                in modern generative AI systems beyond image generation.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 7 -->
+                <a href="blog-post-4.html" class="blog-card-link">
+                    <article class="blog-card" data-category="multimodality">
+                        <img src="images/El.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Multimodality</div>
+                            <h3>Multi-Agent Systems: Collaboration and Competition</h3>
+                            <p class="blog-date">October 30, 2025</p>
+                            <p class="blog-excerpt">How multiple AI agents can work together or compete to solve
+                                problems
+                                more effectively than single agents.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 8 -->
+                <a href="blog-post-5.html" class="blog-card-link">
+                    <article class="blog-card" data-category="multimodality">
+                        <img src="images/El.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Multimodality</div>
+                            <h3>Building a Custom Dataset for Genomic Variant Detection</h3>
+                            <p class="blog-date">October 15, 2025</p>
+                            <p class="blog-excerpt">Step-by-step guide to creating and preprocessing genomic datasets
+                                for
+                                deep learning applications.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+
+                <!-- Blog Card 7 -->
+                <a href="blog-post-6.html" class="blog-card-link">
+                    <article class="blog-card" data-category="diffusion">
+                        <img src="images/El.jpg" alt="Blog post thumbnail" class="blog-thumbnail">
+                        <div class="blog-card-content">
+                            <div class="blog-category">Diffusion</div>
+                            <h3>Bridging the Gap Between Research and Production</h3>
+                            <p class="blog-date">September 28, 2025</p>
+                            <p class="blog-excerpt">Challenges and strategies for transitioning AI research into
+                                production-ready systems.</p>
+                            <span class="read-more">Read More <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </article>
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Blog filter and date sorting functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blogGrid = document.querySelector('.blog-grid');
+        const blogCards = Array.from(document.querySelectorAll('.blog-card'));
+
+        // Sort blog cards by date (most recent first)
+        const sortedCards = blogCards.sort((a, b) => {
+            const dateA = new Date(a.querySelector('.blog-date').textContent);
+            const dateB = new Date(b.querySelector('.blog-date').textContent);
+            return dateB - dateA; // Descending order (most recent first)
+        });
+
+        blogGrid.innerHTML = '';
+        sortedCards.forEach(card => {
+            blogGrid.appendChild(card.closest('.blog-card-link'));
+        });
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+                const allCards = Array.from(document.querySelectorAll('.blog-card'));
+
+                // Filter blog posts
+                allCards.forEach(card => {
+                    const categories = card.getAttribute('data-category').split(' ');
+                    if (filter === 'all' || categories.includes(filter)) {
+                        card.closest('.blog-card-link').style.display = 'block';
+                        card.classList.add('fade-in');
+                    } else {
+                        card.closest('.blog-card-link').style.display = 'none';
+                        card.classList.remove('fade-in');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

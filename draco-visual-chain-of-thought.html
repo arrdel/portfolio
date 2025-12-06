@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="DraCo: How Draft-as-CoT Achieves +8% Improvement on GenEval Through Visual Chain-of-Thought Planning. Explore the three-stage pipeline revolutionizing text-to-image generation.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="DraCo: Revolutionizing Text-to-Image Generation with Visual Chain-of-Thought">
+    <meta property="og:description"
+        content="How Draft-as-CoT achieves +8% improvement on GenEval through concrete visual planning. Discover the three-stage pipeline that excels at rare concepts.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/blog-post-1.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DraCo: Revolutionizing Text-to-Image Generation">
+    <meta name="twitter:description"
+        content="Visual Chain-of-Thought planning achieves +8% GenEval improvement through Draft-Verify-Refine pipeline.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>DraCo: Revolutionizing Text-to-Image Generation with Visual Chain-of-Thought</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Research</span>
+                    <h1>DraCo: Revolutionizing Text-to-Image Generation with Visual Chain-of-Thought</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> December 6, 2025</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 12 min read</span>
+                    </div>
+                </header>
+
+                <!-- Post Featured Image -->
+                <figure class="post-featured-image">
+                    <img src="images/draco_fig/main.jpg" alt="DraCo Hero Image - Three-stage pipeline visualization">
+                    <figcaption>DraCo's three-stage pipeline: Draft → Verify → Refine for improved text-to-image
+                        generation</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <h2>Introduction</h2>
+                    <p>
+                        Text-to-image diffusion models have achieved remarkable progress in recent years, yet they
+                        struggle with compositional complexity and rare attribute combinations. The fundamental issue
+                        lies in the single-pass generation paradigm: given a text prompt, the model must simultaneously
+                        reason about spatial layout, object attributes, and fine-grained details in one shot. This
+                        paper, <a href="https://arxiv.org/abs/2512.05112" target="_blank">arXiv:2512.05112</a>, proposes
+                        DraCo (Draft-as-Chain-of-Thought), which reformulates text-to-image generation as a multi-stage
+                        reasoning process using visual intermediates rather than text-based planning.
+                    </p>
+
+                    <h2>The Problem: Limitations of Single-Pass Generation</h2>
+                    <p>
+                        Current text-to-image models can be formulated as: given prompt $p$, generate image $x_0$ by
+                        iteratively denoising from $x_T \sim \mathcal{N}(0, I)$ using a conditional diffusion process.
+                        The standard conditioning mechanism is:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\epsilon_{\theta}(x_t, t, c(p)) = \text{predicted noise conditioned on prompt}$$
+                    </p>
+
+                    <p>
+                        where $c(p)$ is typically a CLIP text embedding. While this works for simple, common scenarios,
+                        it fails in three critical ways: (1) <strong>spatial reasoning collapse</strong>—the model
+                        cannot maintain consistent object positions and relationships across denoising steps, (2)
+                        <strong>attribute binding failures</strong>—attributes specified for one object leak to others
+                        (e.g., "purple elephant wearing sunglasses" becomes "purple elephant with purple sunglasses"),
+                        and (3) <strong>rare concept generation</strong>—attribute combinations absent from training
+                        data are nearly impossible to generate correctly.
+                    </p>
+
+                    <p>
+                        Text-based Chain-of-Thought approaches attempt to address this by generating intermediate text
+                        descriptions before image generation. However, this merely abstracts the problem without solving
+                        it: the model still must convert abstract spatial descriptions into concrete pixel-level
+                        layouts. DraCo's key insight is to work with visual intermediates that make spatial information
+                        concrete and verifiable.
+                    </p>
+
+                    <h2>DraCo: Three-Stage Visual Reasoning</h2>
+                    <p>
+                        DraCo reformulates image generation as a three-stage pipeline where visual intermediates enable
+                        explicit verification and targeted refinement. Each stage operates on progressively refined
+                        representations of the target image.
+                    </p>
+
+                    <h3>Stage 1: Draft Generation (Low-Resolution Planning)</h3>
+                    <p>
+                        The first stage generates a low-resolution draft image $I_d \in \mathbb{R}^{h_d \times w_d
+                        \times 3}$ (typically $512 \times 512$) using standard diffusion inference:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$I_d = \Phi(p, t_{\text{draft}}, \gamma_d)$$
+                    </p>
+
+                    <p>
+                        where $\Phi$ is the diffusion model, $t_{\text{draft}}$ is the number of denoising steps, and
+                        $\gamma_d$ is the guidance scale. The draft stage uses relatively few steps (20-30) and lower
+                        resolution to prioritize speed while capturing coarse spatial structure. The low resolution
+                        forces the model to focus on layout rather than fine details, which is precisely what the
+                        authors aim for in verification purposes.
+                    </p>
+
+                    <figure>
+                        <img src="images/draco_fig/fig1.jpg" alt="Draft generation examples across various prompts">
+                        <figcaption>Figure 1: Draft generation examples—note the balance between speed and sufficient
+                            structural detail for verification</figcaption>
+                    </figure>
+
+                    <h3>Stage 2: Verification (Semantic Alignment Check)</h3>
+                    <p>
+                        The verification stage computes alignment between the draft and the original prompt using a
+                        multi-modal LLM. The core verification function combines three complementary scores:
+                    </p>
+
+                    <p>
+                        <strong>CLIP Similarity:</strong> The holistic semantic alignment is measured via CLIP
+                        embeddings:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$S_{\text{CLIP}} = \frac{\langle \mathbf{I}_d^{\text{emb}}, \mathbf{p}^{\text{emb}}
+                        \rangle}{\|\mathbf{I}_d^{\text{emb}}\| \cdot \|\mathbf{p}^{\text{emb}}\|}$$
+                    </p>
+
+                    <p>
+                        where $\mathbf{I}_d^{\text{emb}} = \text{CLIP}_V(I_d)$ and $\mathbf{p}^{\text{emb}} =
+                        \text{CLIP}_T(p)$.
+                    </p>
+
+                    <p>
+                        <strong>Attribute Binding:</strong> An MLLM (such as LLaVA or GPT-4V) generates a caption
+                        $\hat{c} = \text{MLLM}(I_d)$ and the authors compute attribute matching by parsing attributes
+                        from both the prompt and caption. For each attribute $a$ in prompt $p$, they check if it appears
+                        in the caption with the correct object binding.
+                    </p>
+
+                    <p>
+                        <strong>Spatial Relationships:</strong> The MLLM also explicitly reasons about spatial
+                        relationships. The authors extract spatial predicates from the prompt (e.g., "next to," "above,"
+                        "inside") and verify they hold in the draft. The spatial score is computed as:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$S_{\text{spatial}} = \frac{\text{# correct spatial relations}}{\text{# total spatial relations
+                        in prompt}}$$
+                    </p>
+
+                    <p>
+                        The overall alignment score combines these three components:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathcal{A} = \alpha S_{\text{CLIP}} + \beta S_{\text{attr}} + \gamma S_{\text{spatial}}$$
+                    </p>
+
+                    <p>
+                        with weights $(\alpha, \beta, \gamma)$ typically set to $(0.3, 0.4, 0.3)$. If $\mathcal{A} \lt
+                        \tau$ (threshold, typically $0.7$) or if the MLLM identifies specific misalignment issues, the
+                        pipeline proceeds to refinement with detailed correction instructions.
+                    </p>
+
+                    <figure>
+                        <img src="images/draco_fig/fig2.jpg" alt="Verification identifying misalignments">
+                        <figcaption>Figure 2: Verification catches attribute binding failures (e.g., incorrect colors on
+                            objects) before refinement</figcaption>
+                    </figure>
+
+                    <h3>Stage 3: Selective Refinement (High-Resolution Correction)</h3>
+                    <p>
+                        The refinement stage produces the final high-resolution image $I_f \in \mathbb{R}^{h_f \times
+                        w_f \times 3}$ (typically $1024 \times 1024$). The key innovation is <strong>selective
+                            correction</strong>: the authors only modify regions flagged by verification, preserving the
+                        spatial structure from the draft.
+                    </p>
+
+                    <p>
+                        Refinement uses a specialized variant of classifier-free guidance called DraCo-CFG, which
+                        interleaves visual and textual conditioning:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\epsilon_{\theta}^{\text{DraCo}} = \epsilon_{\emptyset} + w_d(\epsilon_{I_d} -
+                        \epsilon_{\emptyset}) + w_p(\epsilon_{p} - \epsilon_{\emptyset})$$
+                    </p>
+
+                    <p>
+                        where $\epsilon_{\emptyset}$ is unconditional noise prediction, $\epsilon_{I_d}$ is noise
+                        conditioned on the draft, and $\epsilon_{p}$ is noise conditioned on the prompt. The
+                        hyperparameters are $w_d = 3.0$ (draft preservation) and $w_p = 7.5$ (prompt adherence). This
+                        formulation ensures the final image maintains the spatial structure of the draft while
+                        incorporating semantic corrections from the verification stage.
+                    </p>
+
+                    <p>
+                        For regions identified as misaligned, the authors apply stronger textual guidance. A binary
+                        correction mask $M \in \{0, 1\}^{h_f \times w_f}$ is generated based on verification feedback (1
+                        where corrections are needed, 0 elsewhere). The final noise prediction is:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\epsilon_{\text{final}} = M \odot \epsilon_{p} + (1-M) \odot \epsilon_{I_d}$$
+                    </p>
+
+                    <p>
+                        This selective application ensures corrected regions receive full textual guidance while
+                        unchanged regions benefit from the draft's structural consistency. The refinement runs for 50
+                        steps at full resolution, balancing computational cost with quality.
+                    </p>
+
+                    <figure>
+                        <img src="images/draco_fig/fig3.jpg" alt="Refinement before and after">
+                        <figcaption>Figure 3: Selective refinement corrects flagged issues while preserving spatial
+                            layout from the draft</figcaption>
+                    </figure>
+
+                    <h2>Experimental Validation</h2>
+                    <p>
+                        DraCo is evaluated on three complementary benchmarks designed to measure different aspects of
+                        generative quality. GenEval measures compositional correctness via LLM-based evaluation of
+                        object presence and attribute bindings. Imagine-Bench combines human preference ratings with
+                        automatic metrics for photorealism. GenEval++ focuses specifically on rare attribute
+                        combinations where traditional models struggle.
+                    </p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>GenEval ↑</th>
+                                <th>Imagine-Bench ↑</th>
+                                <th>GenEval++ ↑</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stable Diffusion 2.1</td>
+                                <td>65.2</td>
+                                <td>70.5</td>
+                                <td>60.1</td>
+                            </tr>
+                            <tr>
+                                <td>Text-based CoT</td>
+                                <td>70.8</td>
+                                <td>72.3</td>
+                                <td>62.4</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DraCo</strong></td>
+                                <td><strong>73.2</strong></td>
+                                <td><strong>73.21</strong></td>
+                                <td><strong>63.4</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        DraCo achieves +8.0% improvement on GenEval and +3.0% on GenEval++ over the baseline. Notably,
+                        the improvement on GenEval++ (the rare concepts benchmark) is proportionally larger, suggesting
+                        the approach particularly benefits scenarios where training data provides weak supervision. The
+                        +0.91 point gain on Imagine-Bench indicates improvements in both realism and aesthetic quality,
+                        not just compositional correctness.
+                    </p>
+
+                    <h3>Ablation Analysis</h3>
+                    <p>
+                        To understand which components drive performance, the authors conduct ablation studies by
+                        systematically removing each stage. Removing verification entirely drops GenEval to 69.8 (-3.4
+                        points), suggesting that approximately 43% of DraCo's gain comes from explicit error detection
+                        and correction guidance. Removing refinement degrades performance to 68.5 (-4.7 points),
+                        indicating the significance of high-resolution upsampling with targeted corrections. Removing
+                        drafting (direct high-resolution generation) collapses performance to 65.2 (-8.0 points),
+                        showing the draft is the foundation enabling all subsequent stages.
+                    </p>
+
+                    <p>
+                        These results confirm that all three stages are synergistic: the draft creates a verifiable
+                        intermediate, verification identifies specific failures, and refinement applies targeted
+                        corrections. No single stage dominates; their interplay is essential.
+                    </p>
+
+                    <h2>Implementation Details</h2>
+                    <p>
+                        The following section provides the core algorithm pseudocode and key hyperparameters. The
+                        implementation builds on Stable Diffusion 2.1 with the verification component implemented via
+                        LLaVA-1.5 (or GPT-4V for stronger verification). The complete pipeline is:
+                    </p>
+
+                    <pre><code>Algorithm 1: DraCo Generation Pipeline
+Input: prompt p, draft_cfg γ_d, final_cfg γ_f, draft_steps t_d, refine_steps t_r
+Output: final_image I_f
+
+// Stage 1: Draft Generation
+I_d ← DiffusionModel(p, steps=t_d, cfg_scale=γ_d, resolution=512)
+
+// Stage 2: Verification
+caption ← MLLM.caption(I_d)
+S_CLIP ← CosineSimilarity(CLIP_V(I_d), CLIP_T(p))
+S_attr ← AttributeMatching(p, caption)
+S_spatial ← SpatialRelationVerification(p, caption)
+A ← 0.3 * S_CLIP + 0.4 * S_attr + 0.3 * S_spatial
+issues ← MLLM.analyze_misalignment(p, caption)
+
+// Stage 3: Selective Refinement
+if A &lt; 0.7 or issues is not empty:
+    M ← GenerateCorrectionMask(I_d, issues)
+    I_f ← DiffusionModel(
+        I_d, p, 
+        steps=t_r, 
+        cfg_weights={draft: 3.0, prompt: 7.5},
+        correction_mask=M,
+        resolution=1024
+    )
+else:
+    I_f ← Upscale(I_d, resolution=1024)
+
+return I_f</code></pre>
+
+                    <p>
+                        <strong>Key hyperparameters:</strong> Draft resolution $512 \times 512$ with 25 steps,
+                        verification threshold $\tau = 0.7$, refinement weights $(w_d, w_p) = (3.0, 7.5)$. The draft CFG
+                        scale ranges from $5.0$-$10.0$ depending on prompt complexity; the refinement steps typically
+                        range from $40$-$50$ at full resolution.
+                    </p>
+
+                    <h2>Computational Analysis and Trade-offs</h2>
+                    <p>
+                        The multi-stage approach introduces computational overhead. A single forward pass through Stable
+                        Diffusion takes approximately $8$-$12$ seconds (depending on hardware). DraCo's pipeline
+                        involves: (1) draft generation at $512 \times 512$ (~$4$s), (2) verification via MLLM
+                        (~$3$-$5$s), (3) refinement at $1024 \times 1024$ (~$10$-$15$s). Total latency is approximately
+                        $17$-$34$ seconds versus $8$-$12$ seconds for baseline generation. The speedup could be achieved
+                        through parallelization: verification can begin while refinement's initial denoising steps
+                        complete.
+                    </p>
+
+                    <p>
+                        From an efficacy perspective, the added computational cost yields substantial improvements in
+                        compositional accuracy, particularly for attribute binding (GenEval +8%). For applications where
+                        correctness matters more than latency (e.g., product visualization, scientific illustration),
+                        this trade-off is favorable. For interactive generation, parallelization strategies or
+                        early-exit mechanisms (skipping refinement for high-alignment drafts) could reduce overhead.
+                    </p>
+
+                    <h2>Why This Matters: Connections to Broader AI Research</h2>
+                    <p>
+                        DraCo exemplifies a critical principle in recent AI research: <strong>intermediate
+                            representations enable better reasoning</strong>. Similar ideas appear across domains:
+                    </p>
+
+                    <p>
+                        In language models, Chain-of-Thought prompting generates intermediate text steps before final
+                        answers. In robotics, hierarchical planning decomposes complex tasks into subtasks. In code
+                        generation, some approaches first generate abstract syntax trees before concrete code. DraCo
+                        applies this principle to the generative modeling domain: intermediate visual representations
+                        (drafts) enable explicit verification and targeted refinement.
+                    </p>
+
+                    <p>
+                        This suggests a deeper insight: <strong>verifiable intermediates</strong> are more valuable than
+                        hidden latent representations. By making intermediates explicit and verifiable (via MLLMs), the
+                        system can reason about and correct failures transparently. This contrasts with end-to-end
+                        models that hide all reasoning in latent space, making failure modes opaque.
+                    </p>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color);">Summary and
+                    Future Outlook</h2>
+                <div class="post-content">
+                    <p>
+                        DraCo reformulates text-to-image generation as a three-stage visual reasoning process: (1)
+                        drafting generates low-resolution spatial plans, (2) verification identifies semantic
+                        misalignments via MLLMs, and (3) selective refinement applies targeted high-resolution
+                        corrections. This design achieves +8% GenEval improvement and particularly excels (+3% on
+                        GenEval++) on rare attribute combinations.
+                    </p>
+
+                    <p>
+                        The core contribution is demonstrating that <strong>verifiable visual intermediates outperform
+                            pure text-based planning</strong>. By making the generation process explicit and checkable
+                        at intermediate stages, DraCo enables error detection and targeted correction—capabilities
+                        unavailable to end-to-end single-stage models.
+                    </p>
+
+                    <p>
+                        <strong>Open questions:</strong> Can iterative verification-refinement cycles further improve
+                        quality? How do different MLLM architectures affect verification accuracy? What is the
+                        theoretical bound on improvements achievable through multi-stage approaches versus single-stage
+                        models? These questions point toward exciting future research directions.
+                    </p>
+
+                    <p
+                        style="margin-top: 30px; padding: 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                        <strong>📄 Original Paper:</strong> Jiang, D., et al. "DraCo: Draft as CoT for Text-to-Image
+                        Preview and Rare Concept Generation." <em>arXiv preprint arXiv:2512.05112</em> (2025). Available
+                        at <a href="https://arxiv.org/abs/2512.05112"
+                            target="_blank">https://arxiv.org/abs/2512.05112</a>
+                    </p>
+                </div>
+
+                <!-- Related Posts (Optional) -->
+                <aside class="related-posts">
+                    <h3>Related Articles</h3>
+                    <ul>
+                        <li><a href="blog-post-2.html">Getting Started with Diffusion Models</a></li>
+                        <li><a href="blog-post-3.html">Multimodal Learning: The Future of AI</a></li>
+                        <li><a href="blog-post-4.html">Advancing Text-to-Image with AI</a></li>
+                    </ul>
+                </aside>
+            </article>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

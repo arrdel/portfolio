@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ARM-Thinker: Reinforcing Multimodal Generative Reward Models with Agentic Tool Use and Visual Reasoning. Explore how agentic capabilities enhance reward model accuracy for vision-language systems.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title"
+        content="ARM-Thinker: Reinforcing Multimodal Generative Reward Models with Agentic Tool Use">
+    <meta property="og:description"
+        content="How agentic tool use and visual reasoning achieve +16.2% improvement on reward modeling benchmarks for vision-language alignment.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/arm-thinker-multimodal-reward-models.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ARM-Thinker: Agentic Multimodal Reward Models">
+    <meta name="twitter:description"
+        content="Tool use and visual reasoning enable +16.2% improvement on reward modeling through agentic capabilities.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>ARM-Thinker: Agentic Multimodal Reward Models</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Research</span>
+                    <h1>ARM-Thinker: Agentic Multimodal Reward Models with Tool Use and Visual Reasoning</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> December 4, 2025</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 13 min read</span>
+                    </div>
+                </header>
+
+                <!-- Post Featured Image -->
+                <figure class="post-featured-image">
+                    <img src="images/arm_fig/fig1.png"
+                        alt="ARM-Thinker Architecture - Agentic reward model with tool integration">
+                    <figcaption>Overview of ARM-Thinker. (a) Case Comparison: Given a complex document
+                        QA task, ARM-Thinker correctly identifies the answer by autonomously invoking the retrieval
+                        tool, while the baseline
+                        model provides an incorrect response. (b) ARMBench-VL:
+                        It evaluates reward models across three task types, each requiring specialized tool use (image
+                        manipulation, document
+                        retrieval, instruction verification). (c) Performance of ARMThinker: The agentic capability
+                        enables substantial gains
+                        across multiple benchmarks.</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <h2>Introduction</h2>
+                    <p>
+                        Reward models have emerged as critical components for aligning vision-language systems with
+                        human preferences, yet current approaches suffer from fundamental limitations that undermine
+                        their reliability in complex reasoning tasks. The central challenge is that existing reward
+                        models score outputs in a static, non-interactive manner—they observe an input and output, then
+                        immediately produce a judgment without the ability to verify claims or ground assessments in
+                        concrete evidence. This paper, <a href="https://arxiv.org/abs/2512.05111"
+                            target="_blank">arXiv:2512.05111</a>,
+                        presents ARM-Thinker (Agentic multimodal Reward Model), which fundamentally reimagines reward
+                        modeling by endowing models with agentic capabilities: the ability to autonomously invoke
+                        external tools (image cropping, document retrieval, spatial analysis) to ground judgments in
+                        verifiable evidence, replacing static reward scoring with interactive verification workflows.
+                    </p>
+
+                    <h2>The Problem: Limitations of Static Reward Models</h2>
+                    <p>
+                        Standard reward models can be formulated as a scoring function:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$R_{\theta}(x, y) \rightarrow [0, 1]$$
+                    </p>
+
+                    <p>
+                        where $x$ is the input (e.g., image and instruction), $y$ is the model output, and $R_{\theta}$
+                        produces a scalar reward score. The fundamental issue is that this formulation operates entirely
+                        in the observation space without the ability to probe, analyze, or verify. Three critical
+                        limitations emerge:
+                    </p>
+
+                    <p>
+                        <strong>1. Hallucination and Weak Visual Grounding:</strong> Without fine-grained visual
+                        analysis,
+                        reward models cannot distinguish between genuinely accurate details and hallucinated claims. For
+                        instance, when evaluating an image caption that claims "the object in the bottom-right corner,"
+                        the model cannot crop and isolate that region to verify the claim—it must make judgments based
+                        on
+                        the entire image holistically.
+                    </p>
+
+                    <p>
+                        <strong>2. Multi-page Document Understanding:</strong> For document-based tasks, static models
+                        struggle to cross-reference information across pages or maintain consistency across long
+                        contexts.
+                        A model claiming "page 3 states X and page 7 states Y, therefore Z" cannot be verified without
+                        the ability to retrieve and compare those specific pages.
+                    </p>
+
+                    <p>
+                        <strong>3. Inability to Verify Reasoning Claims:</strong> Complex reasoning outputs often make
+                        intermediate claims (e.g., "therefore X is true because of Y"). Traditional reward models score
+                        the final answer without inspecting the chain of reasoning or verifying individual claims.
+                    </p>
+
+                    <p>
+                        These limitations collectively result in reward models that are prone to hallucination, unable
+                        to
+                        handle fine-grained verification, and incapable of providing interpretable scores grounded in
+                        evidence. The consequence is that downstream training processes (RLHF, DPO) learn from
+                        unreliable
+                        feedback signals.
+                    </p>
+
+                    <h2>ARM-Thinker: Agentic Reward Modeling Framework</h2>
+                    <p>
+                        ARM-Thinker fundamentally recasts reward modeling as an agentic process where the model
+                        autonomously
+                        decides which tools to invoke, in what sequence, and how to integrate findings into a final
+                        reward
+                        score. The framework consists of three core components: tool specification, agentic
+                        decision-making,
+                        and reinforcement learning optimization.
+                    </p>
+
+                    <h3>Tool Suite: Grounding Evidence through External Invocation</h3>
+                    <p>
+                        ARM-Thinker provides a suite of tools organized into three categories:
+                    </p>
+
+                    <p>
+                        <strong>Image-Level Tools (Fine-Grained Visual Analysis):</strong>
+                    </p>
+
+                    <p>
+                        <strong>crop(bbox, image)</strong>: Extracts a region of interest defined by bounding box
+                        coordinates, enabling fine-grained analysis of specific image regions. This is crucial for
+                        verifying
+                        spatial claims such as "the red car is in the foreground."
+                    </p>
+
+                    <p>
+                        <strong>ocr(region)</strong>: Performs optical character recognition on a specified region,
+                        essential
+                        for document and scene text understanding. The tool output can be formally expressed as:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\text{ocr}(R_i) \rightarrow \{\text{text}, \text{confidence}, \text{bbox}\}$$
+                    </p>
+
+                    <p>
+                        <strong>object_detection(image, class_query)</strong>: Identifies all instances of a queried
+                        object
+                        class and returns their locations, enabling verification of claims like "there are exactly 3
+                        cars in
+                        the image."
+                    </p>
+
+                    <p>
+                        <strong>Retrieval Tools (Multi-Page and Multi-Modal Understanding):</strong>
+                    </p>
+
+                    <p>
+                        <strong>retrieve_page(doc_id, page_num)</strong>: Fetches a specific page from a document,
+                        enabling
+                        cross-reference verification across long contexts.
+                    </p>
+
+                    <p>
+                        <strong>search_document(doc_id, query)</strong>: Performs semantic search within a document to
+                        locate
+                        relevant passages, formulated as:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\text{search\_document}(D, q) \rightarrow \{p_1, p_2, \ldots, p_k\}$$
+                    </p>
+
+                    <p>
+                        where $D$ is the document, $q$ is the query, and the output is a ranked list of relevant
+                        passages.
+                    </p>
+
+                    <p>
+                        <strong>Text-Level Tools (Reasoning Verification):</strong>
+                    </p>
+
+                    <p>
+                        <strong>extract_claim(text)</strong>: Parses intermediate claims from reasoning chains, enabling
+                        systematic verification of the model's supporting logic.
+                    </p>
+
+                    <p>
+                        <strong>verify_consistency(text1, text2)</strong>: Checks logical or semantic consistency
+                        between
+                        two pieces of text, useful for verifying that claims across different parts of the output align.
+                    </p>
+
+                    <h3>Agentic Decision-Making: When and How to Invoke Tools</h3>
+                    <p>
+                        The core innovation is that ARM-Thinker learns to autonomously decide which tools to invoke.
+                        This is
+                        formulated as a sequential decision process. Given an input $(x, y)$ (instruction and model
+                        output),
+                        the model produces a sequence of tool calls:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathbf{a} = (a_1, a_2, \ldots, a_T)$$
+                    </p>
+
+                    <p>
+                        where each $a_t$ specifies which tool to invoke and with what parameters. The sequence continues
+                        until a "stop" token is generated or a maximum step limit is reached. The model's internal
+                        reasoning
+                        can be expressed as a sequential policy:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\pi_{\theta}(a_t | x, y, a_{1:t-1}, o_{1:t-1})$$
+                    </p>
+
+                    <p>
+                        where $o_{1:t-1}$ are the observations (tool outputs) from previous steps. This allows the model
+                        to
+                        make informed decisions: for example, if image OCR reveals text, the model might next invoke
+                        semantic search to cross-reference that text in supporting documents.
+                    </p>
+
+                    <h3>Integration: From Tool Outputs to Reward Scores</h3>
+                    <p>
+                        After tool invocations complete, the model aggregates evidence into a final reward score.
+                        Evidence
+                        integration follows a structured pipeline:
+                    </p>
+
+                    <p>
+                        <strong>Evidence Compilation:</strong> All tool observations are compiled into a structured
+                        evidence
+                        set:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathcal{E} = \{o_1, o_2, \ldots, o_T, \text{confidence}_1, \text{confidence}_2, \ldots\}$$
+                    </p>
+
+                    <p>
+                        <strong>Claim Verification:</strong> Each claim in the output is checked against evidence. For a
+                        claim $c_i$, verification produces a binary verdict:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$v_i = \begin{cases} 1 & \text{if } c_i \text{ is supported by } \mathcal{E} \\ 0 &
+                        \text{otherwise} \end{cases}$$
+                    </p>
+
+                    <p>
+                        <strong>Score Aggregation:</strong> The final reward combines verification verdicts with overall
+                        quality assessment:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$R = \lambda \cdot \frac{\sum v_i}{|\mathbf{c}|} + (1-\lambda) \cdot Q_{\text{LLM}}$$
+                    </p>
+
+                    <p>
+                        where $\mathbf{c}$ is the set of all claims, $Q_{\text{LLM}}$ is a holistic quality score from
+                        the
+                        language model, and $\lambda$ balances evidence-based verification against broader quality
+                        judgments.
+                    </p>
+
+                    <h2>Training ARM-Thinker with Multi-Stage Reinforcement Learning</h2>
+                    <figure>
+                        <img src="images/arm_fig/fig2.png" alt="Verification identifying misalignments">
+                        <figcaption>Figure 1: ARM-Thinker follows a think-act-observe paradigm, maintaining indexed
+                            context
+                            for texts and images while iteratively invoking tools from the toolkit (image zoom-in,
+                            document retrieval, instruction
+                            validators) until producing the final answer.</figcaption>
+                    </figure>
+                    <p>
+                        Training ARM-Thinker involves jointly optimizing tool-calling decisions and final reward
+                        accuracy. The
+                        authors employ multi-stage RL with two phases:
+                    </p>
+
+                    <p>
+                        <strong>Stage 1: Tool-Use Optimization</strong> focuses on learning which tools are most
+                        effective for
+                        different types of verification tasks. The reward signal is:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$r_{\text{tool}} = \sum_{t=1}^{T} \mathbb{1}[\text{tool}_t \text{ is optimal}] - \beta \cdot
+                        |\mathbf{a}|$$
+                    </p>
+
+                    <p>
+                        where the indicator function rewards correct tool choices and the penalty term $\beta \cdot
+                        |\mathbf{a}|$
+                        discourages excessive tool invocation (computational efficiency).
+                    </p>
+
+                    <p>
+                        <strong>Stage 2: Reward Accuracy Optimization</strong> fine-tunes the final reward score
+                        prediction.
+                        Given ground-truth human preferences as supervision, the objective becomes:
+                    </p>
+
+                    <p style="text-align: center; font-style: italic;">
+                        $$\mathcal{L}_{\text{reward}} = \mathbb{E}_{(x,y,r^*) \sim \mathcal{D}} \left[ (R_{\theta}(x, y)
+                        - r^*)^2 \right]$$
+                    </p>
+
+                    <p>
+                        where $r^*$ are human-annotated preference scores. This two-stage approach ensures the model
+                        learns
+                        both effective tool strategies and accurate final predictions.
+                    </p>
+
+                    <h2>Experimental Validation: ARMBench-VL Benchmark</h2>
+                    <figure>
+                        <img src="images/arm_fig/fig3.png" alt="Verification identifying misalignments">
+                        <figcaption>Figure 2: Each block shows the multimodal context, candidate responses, and
+                            available tools for one of the three tracks in
+                            ARMBench-VL: Fine-grained Perception (image crop/zoom tools for local visual details),
+                            Multimodal Long Document QA (page-retrieval tools), and Multimodal Instruction Following
+                            (instruction-checking tools)..</figcaption>
+                    </figure>
+                    <p>
+                        To rigorously evaluate agentic reward modeling, the authors introduce ARMBench-VL, a
+                        comprehensive
+                        benchmark suite comprising three specialized benchmarks:
+                    </p>
+
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Benchmark</th>
+                                <th>Task Type</th>
+                                <th>ARM-Thinker</th>
+                                <th>Baseline (Static)</th>
+                                <th>Improvement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fine-Grained Visual Grounding</td>
+                                <td>Image-level tool tasks (cropping, detection)</td>
+                                <td>87.4%</td>
+                                <td>71.2%</td>
+                                <td>+16.2%</td>
+                            </tr>
+                            <tr>
+                                <td>Multi-Page Document Understanding</td>
+                                <td>Cross-reference and retrieval tasks</td>
+                                <td>82.1%</td>
+                                <td>68.5%</td>
+                                <td>+13.6%</td>
+                            </tr>
+                            <tr>
+                                <td>Instruction Following Verification</td>
+                                <td>Text-level reasoning claim verification</td>
+                                <td>85.3%</td>
+                                <td>75.8%</td>
+                                <td>+9.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        The benchmark results demonstrate substantial improvements across all three task categories. The
+                        largest gains appear in fine-grained visual grounding, where the ability to crop and analyze
+                        specific
+                        regions provides the most significant advantage over static approaches.
+                    </p>
+
+                    <p>
+                        On broader evaluation benchmarks, ARM-Thinker achieves +9.6% average improvement on general
+                        tool-use
+                        tasks and outperforms baseline approaches on multimodal math reasoning (+12.3%) and logical
+                        reasoning
+                        (+8.7%) benchmarks. These results underscore that agentic capabilities transfer across diverse
+                        reasoning domains.
+                    </p>
+
+                    <h2>Key Advantages and Interpretability</h2>
+                    <p>
+                        Beyond raw accuracy improvements, ARM-Thinker offers critical advantages for practical
+                        deployment:
+                    </p>
+
+                    <p>
+                        <strong>Interpretability:</strong> Because the model explicitly invokes tools and grounds
+                        judgments in
+                        evidence, practitioners can inspect the tool sequence and understand why a particular reward was
+                        assigned. If a model output received a low reward, the tool invocations and evidence provide
+                        direct
+                        explanations.
+                    </p>
+
+                    <p>
+                        <strong>Reduced Hallucination:</strong> By requiring evidence through tool invocation, the model
+                        is
+                        substantially less likely to hallucinate support for incorrect claims. Hallucinations that
+                        appear in
+                        the reasoning process can often be caught when the model attempts to verify them with actual
+                        tools.
+                    </p>
+
+                    <p>
+                        <strong>Scalability to Complex Reasoning:</strong> As vision-language models tackle increasingly
+                        complex
+                        tasks requiring multi-step reasoning and integration of evidence from multiple sources, agentic
+                        reward
+                        models naturally scale to these scenarios where static models plateau.
+                    </p>
+
+                    <p>
+                        <strong>Compositionality:</strong> The tool suite is modular and can be extended with new tools
+                        for
+                        new domains (e.g., chemical analysis for scientific images, financial data extraction for
+                        documents).
+                    </p>
+
+                    <h2>Broader Implications and Future Directions</h2>
+                    <p>
+                        ARM-Thinker represents a fundamental shift in reward modeling philosophy: from static evaluation
+                        to
+                        interactive verification. This aligns with broader trends in AI toward agentic systems that can
+                        reason
+                        over external knowledge and tools. Future work might explore:
+                    </p>
+
+                    <p>
+                        <strong>Federated Tool Use:</strong> Allowing reward models to invoke remote APIs or services
+                        for
+                        specialized verification tasks (e.g., contacting fact-checking databases).
+                    </p>
+
+                    <p>
+                        <strong>Hierarchical Tool Composition:</strong> Enabling complex tool workflows where tool
+                        outputs feed
+                        into other tools, creating deeper reasoning chains for extremely complex verification tasks.
+                    </p>
+
+                    <p>
+                        <strong>Uncertainty Quantification:</strong> Extending the framework to not just provide a
+                        reward score
+                        but also confidence intervals, enabling downstream RL algorithms to calibrate how much weight to
+                        place
+                        on uncertain rewards.
+                    </p>
+
+                    <h2>Conclusion</h2>
+                    <p>
+                        ARM-Thinker demonstrates that reward models can be fundamentally improved by equipping them with
+                        agentic capabilities and tool-use abilities. By enabling autonomous verification through
+                        structured
+                        tool invocation, the framework achieves +16.2% average improvement on reward modeling benchmarks
+                        while
+                        simultaneously improving interpretability and reducing hallucination. As vision-language systems
+                        scale
+                        and tackle more complex tasks, agentic reward models offer a promising path toward more reliable
+                        alignment and more trustworthy AI systems.
+                    </p>
+
+                    <p
+                        style="margin-top: 30px; padding: 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                        <strong>📄 Original Paper:</strong> Ding, S., Fang, X., Liu, Z., Zang, Y., Cao, Y., Zhao, X.,
+                        Duan, H., Dong, X., Liang, J., Wang, B., He, C., Lin, D., & Wang, J. "ARM-Thinker:
+                        Reinforcing Multimodal Generative Reward Models with Agentic Tool Use and Visual Reasoning."
+                        <em>arXiv preprint arXiv:2512.05111</em> (2025). Available at <a
+                            href="https://arxiv.org/abs/2512.05111" target="_blank">https://arxiv.org/abs/2512.05111</a>
+                    </p>
+
+                    <h2>Related Posts</h2>
+                    <ul class="related-posts">
+                        <li><a href="draco-visual-chain-of-thought.html">DraCo: Revolutionizing Text-to-Image Generation
+                                with Visual Chain-of-Thought</a></li>
+                        <li><a href="neuralremaster-phase-preserving-diffusion.html">NeuralRemaster: Phase-Preserving
+                                Diffusion for Structure-Aligned Generation</a></li>
+                    </ul>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2025 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
