@@ -1,11 +1,14 @@
 :root {
   --text-color: #1f2937;
-  --text-secondary: #6b7280;
+  --text-secondary: #4b5563;
   --link-color: #2563eb;
   --hover-color: #1d4ed8;
   --background: #fafafa;
   --background-alt: #f5f5f5;
   --border-color: #e5e7eb;
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --card-shadow-hover: 0 10px 30px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -21,14 +24,14 @@ html {
 body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
     Arial, sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 16px;
   color: var(--text-color);
   background-color: var(--background);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}}
+}
 
 a {
   color: var(--link-color);
@@ -64,6 +67,8 @@ a:visited {
   overflow-y: auto;
   border-right: 1px solid var(--border-color);
   z-index: 100;
+  display: flex;
+  flex-direction: column;
 }
 
 .profile {
@@ -82,13 +87,15 @@ a:visited {
 
 .profile-img:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
 }
 
 .profile h1 {
   font-size: 24px;
   margin-bottom: 10px;
   color: var(--text-color);
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
 
 .profile .email {
@@ -137,19 +144,22 @@ a:visited {
 .social-links a {
   font-size: 14px;
   color: var(--text-secondary);
-  padding: 6px 10px;
+  padding: 8px 12px;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  transition: all 0.25s ease;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  background-color: var(--background);
 }
 
 .social-links a:hover {
-  background-color: var(--background-alt);
+  background-color: var(--link-color);
   border-color: var(--link-color);
-  color: var(--link-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .social-links a i {
@@ -183,11 +193,73 @@ a:visited {
   }
 }
 
+.about-section h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: var(--text-color);
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.about-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-gradient);
+  border-radius: 2px;
+}
+
 .about-section p {
   font-size: 16px;
   line-height: 1.8;
   color: var(--text-secondary);
   margin-bottom: 20px;
+}
+
+/* Research Interest Tags */
+.research-interests {
+  margin: 28px 0;
+}
+
+.research-interests h3 {
+  font-size: 18px;
+  color: var(--text-color);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.interest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.interest-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  border-radius: 24px;
+  font-size: 14px;
+  color: var(--link-color);
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.interest-tag:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.interest-tag i {
+  font-size: 14px;
 }
 
 .about-section ul {
@@ -292,7 +364,20 @@ a:visited {
   font-size: 32px;
   margin-bottom: 30px;
   color: var(--text-color);
-  font-weight: 600;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.projects-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-gradient);
+  border-radius: 2px;
 }
 
 /* PUBLICATIONS SECTION */
@@ -304,7 +389,20 @@ a:visited {
   font-size: 32px;
   margin-bottom: 30px;
   color: var(--text-color);
-  font-weight: 600;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.publications-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-gradient);
+  border-radius: 2px;
 }
 
 .filter-tabs {
@@ -348,17 +446,18 @@ a:visited {
   display: flex;
   gap: 25px;
   padding: 25px;
-  background-color: var(--background-alt);
-  border-radius: 8px;
+  background-color: white;
+  border-radius: 12px;
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
   overflow: hidden;
+  box-shadow: var(--card-shadow);
 }
 
 .publication-card:hover {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--card-shadow-hover);
   transform: translateY(-4px);
-  border-color: var(--link-color);
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
 .pub-image {
@@ -366,10 +465,15 @@ a:visited {
   height: 150px;
   object-fit: cover;
   object-position: center;
-  border-radius: 6px;
+  border-radius: 8px;
   flex-shrink: 0;
   display: block;
   overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.publication-card:hover .pub-image {
+  transform: scale(1.03);
 }
 
 .pub-content {
@@ -425,20 +529,23 @@ a:visited {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   background-color: var(--background);
   border: 1px solid var(--link-color);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   color: var(--link-color);
   text-decoration: none;
+  font-weight: 500;
 }
 
 .pub-links a:hover {
   background-color: var(--link-color);
   color: white;
   border-color: var(--link-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
 }
 
 .pub-links a:visited {
@@ -591,7 +698,7 @@ pre {
 
 /* FOOTER */
 .footer {
-  background: transparent;
+  background: linear-gradient(180deg, var(--background) 0%, var(--background-alt) 100%);
   color: var(--text-color);
   padding: 60px 40px;
   margin-top: 0;
@@ -722,17 +829,18 @@ pre {
 
 .sidebar-nav .nav-link {
   display: block;
-  padding: 8px 12px;
+  padding: 10px 14px;
   color: var(--text-secondary);
   font-size: 14px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.25s ease;
   text-decoration: none;
 }
 
 .sidebar-nav .nav-link:hover,
 .sidebar-nav .nav-link.active {
-  background-color: var(--background-alt);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
   color: var(--link-color);
   font-weight: 600;
 }
@@ -1317,7 +1425,6 @@ pre {
     font-size: 20px;
   }
 }
-}
 
 @media (max-width: 480px) {
   .sidebar-nav {
@@ -1361,5 +1468,77 @@ pre {
   .post-meta {
     flex-direction: column;
     gap: 10px;
+  }
+}
+
+/* SECTION ANIMATIONS */
+.publications-section,
+.projects-section {
+  animation: fadeIn 0.6s ease-in;
+}
+
+.publication-card {
+  animation: slideUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.publication-card:nth-child(1) { animation-delay: 0.1s; }
+.publication-card:nth-child(2) { animation-delay: 0.2s; }
+.publication-card:nth-child(3) { animation-delay: 0.3s; }
+.publication-card:nth-child(4) { animation-delay: 0.4s; }
+.publication-card:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Contact info styling */
+.contact {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.contact a {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.contact a:hover {
+  color: var(--link-color);
+}
+
+/* Responsive interest tags */
+@media (max-width: 768px) {
+  .interest-tags {
+    gap: 8px;
+  }
+
+  .interest-tag {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .about-section h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .interest-tags {
+    gap: 6px;
+  }
+
+  .interest-tag {
+    font-size: 12px;
+    padding: 5px 10px;
   }
 }
