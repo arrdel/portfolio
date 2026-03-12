@@ -8,7 +8,8 @@
   --border-color: #e5e7eb;
   --accent-gradient: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%);
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --card-shadow-hover: 0 10px 30px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover:
+    0 10px 30px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -22,8 +23,13 @@ html {
 }
 
 body {
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-    Arial, sans-serif;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   font-weight: 500;
   font-size: 16px;
   color: var(--text-color);
@@ -82,7 +88,9 @@ a:visited {
   object-fit: cover;
   margin-bottom: 20px;
   border: 3px solid var(--border-color);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .profile-img:hover {
@@ -243,7 +251,11 @@ a:visited {
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(124, 58, 237, 0.08) 100%
+  );
   border: 1px solid rgba(37, 99, 235, 0.15);
   border-radius: 24px;
   font-size: 14px;
@@ -253,7 +265,11 @@ a:visited {
 }
 
 .interest-tag:hover {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.15) 0%,
+    rgba(124, 58, 237, 0.15) 100%
+  );
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
@@ -315,7 +331,9 @@ a:visited {
   padding: 20px;
   background-color: var(--background-alt);
   border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   overflow: hidden;
 }
 
@@ -698,7 +716,11 @@ pre {
 
 /* FOOTER */
 .footer {
-  background: linear-gradient(180deg, var(--background) 0%, var(--background-alt) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    var(--background-alt) 100%
+  );
   color: var(--text-color);
   padding: 60px 40px;
   margin-top: 0;
@@ -840,7 +862,11 @@ pre {
 
 .sidebar-nav .nav-link:hover,
 .sidebar-nav .nav-link.active {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(124, 58, 237, 0.08) 100%
+  );
   color: var(--link-color);
   font-weight: 600;
 }
@@ -1482,11 +1508,21 @@ pre {
   animation-fill-mode: both;
 }
 
-.publication-card:nth-child(1) { animation-delay: 0.1s; }
-.publication-card:nth-child(2) { animation-delay: 0.2s; }
-.publication-card:nth-child(3) { animation-delay: 0.3s; }
-.publication-card:nth-child(4) { animation-delay: 0.4s; }
-.publication-card:nth-child(5) { animation-delay: 0.5s; }
+.publication-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.publication-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.publication-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.publication-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.publication-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
 
 @keyframes slideUp {
   from {

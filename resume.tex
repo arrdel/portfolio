@@ -1,0 +1,224 @@
+%===========================  PROFESSIONAL CV  ===========================
+\documentclass[a4paper,11pt]{article}
+
+%-------------------------  PAGE GEOMETRY  -------------------------
+\usepackage[margin=0.75in]{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{4pt plus 2pt minus 1pt}
+
+%---------------------------  FONTS  -------------------------------
+\usepackage{libertinus}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+
+%---------------------------  PACKAGES  ----------------------------
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{microtype}
+
+%--------------------------  COLORS  -------------------------------
+\definecolor{accent}{RGB}{0,102,153}
+\definecolor{heading}{RGB}{40,40,40}
+\definecolor{subtle}{gray}{0.3}
+
+%--------------------------  HYPERREF  -----------------------------
+\hypersetup{
+    colorlinks=true,
+    urlcolor=accent,
+    linkcolor=accent,
+    citecolor=accent,
+    pdfborder={0 0 0}
+}
+
+%--------------------------  SECTION STYLE  ------------------------
+\titleformat{\section}
+  {\Large\bfseries\sffamily\color{heading}}
+  {}{0em}{}[\color{accent}\titlerule]
+\titlespacing{\section}{0pt}{12pt}{8pt}
+
+%--------------------------  EXPERIENCE ENVIRONMENTS  ---------------
+\newenvironment{experience}[4]
+  {\noindent\textbf{\large #1}\hfill\textit{#2}\par
+   \noindent\small\color{subtle}#3\hfill\color{subtle}#4\par\vspace{3pt}
+   \begin{itemize}[leftmargin=1.2em,itemsep=3pt,topsep=2pt]}
+  {\end{itemize}\vspace{8pt}}
+
+%--------------------------  BEGIN DOCUMENT  -----------------------
+\begin{document}
+\pagestyle{empty}
+
+%=========================  HEADER  ==============================
+\begin{center}
+    {\Huge\bfseries\sffamily Adele Chinda}\\[8pt]
+    \small
+    \color{accent}
+    \href{https://github.com/arrdel}{\faGithub\ arrdel} \enskip|\enskip
+    \href{https://linkedin.com/in/adele-chinda}{\faLinkedin\ adele-chinda} \enskip|\enskip
+    \href{https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en}{\faGraduationCap\ Google Scholar} \enskip|\enskip
+    \href{https://arrdel.github.io/portfolio}{\faGlobe\ arrdel.github.io/portfolio} \enskip|\enskip
+    \href{mailto:chindahel1@gmail.com}{\faEnvelope\ chindahel1@gmail.com} \enskip|\enskip
+    \href{tel:+14049347824}{\faMobile\ +1 (404) 934-7824}
+\end{center}
+
+\vspace{8pt}
+
+%=========================  SUMMARY  =============================
+\section*{Professional Summary}
+
+Ph.D.\ student in Computer Science at \textbf{Georgia State University}, researching \textbf{agentic reasoning}, \textbf{Large Language Model (LLM) agents}, and \textbf{diffusion models}.
+My research focuses on building intelligent, autonomous systems capable of understanding context, reasoning through uncertainty, and executing complex, multi-step tasks.
+I am passionate about bridging the gap between high-level cognitive reasoning and low-level robotic control---empowering embodied agents with spatial-semantic memory, adaptive planning, and human-aligned decision-making abilities.
+
+%=========================  EXPERIENCE  ==========================
+\section*{Research and Professional Experience}
+
+\begin{experience}
+  {Ph.D. Researcher}{Sep 2025 -- Present}
+  {\href{https://www.amai-gsu.us/}{Advanced Mobility \& Augmented Intelligence Lab}, Georgia State University \enspace|\enspace Advisor: \href{https://www.amai-gsu.us/group/}{Dr. Haoxin Wang}}{Atlanta, GA}
+  \item Researching multimodal AI systems, diffusion-based language generation, and vision--language reasoning architectures.
+  \item Developing novel mixture-of-experts frameworks for multimodal context-aware understanding.
+  \item Designing collaborative multi-agent systems with semantic reasoning capabilities for complex task execution.
+  \item Investigating the application of diffusion models to enhance LLM performance in controlled text generation and multi-modal understanding.
+\end{experience}
+
+\begin{experience}
+  {Ph.D. Researcher}{Jan 2024 -- Sep 2025}
+  {Assistive Intelligence Lab, Georgia State University \enspace|\enspace Advisor: Dr. Yi Ding}{Atlanta, GA}
+  \item Investigated how Large Language Models can enhance both high-level and low-level planning in embodied agents.
+  \item Designed reasoning architectures that integrate spatial-semantic memory and goal-conditioned action selection.
+  \item Addressed challenges including partial observability, scaling semantic memory, and occlusion-aware navigation.
+  \item Contributed to the lab's broader mission of developing adaptive, assistive AI systems for real-world collaboration.
+\end{experience}
+
+\begin{experience}
+  {Undergraduate Research Assistant}{Sep 2023 -- Jan 2024}
+  {Artificial Intelligence Lab, Belgorod State University}{Belgorod, Russia}
+  \item Developed intelligent control algorithms for non-linear robotic systems, improving precision and system stability.
+  \item Collaborated with supervisors on data-driven modeling for adaptive robotic performance in uncertain conditions.
+\end{experience}
+
+\begin{experience}
+  {ML Research Intern}{Jun 2023 -- Aug 2023}
+  {CVisionLab}{Rostov, Russia}
+  \item Implemented fuzzy-logic decision systems to model uncertainty in machine perception tasks.
+  \item Conducted experiments comparing fuzzy and probabilistic approaches to image classification and tracking.
+\end{experience}
+
+\begin{experience}
+  {Software Engineer}{May 2022 -- Aug 2023}
+  {Paytrybe}{Kazan, Russia}
+  \item Led end-to-end development of Android and iOS fintech applications, including UI/UX and API integration.
+  \item Established testing and continuous integration workflows to ensure robustness, scalability, and maintainability.
+\end{experience}
+
+%=========================  EDUCATION  ===========================
+\section*{Education}
+
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X r@{}}
+  2024--2029 & \textbf{Ph.D.\ in Computer Science}, Georgia State University & \\
+             & Advisor: \href{https://www.amai-gsu.us/group/}{Dr. Haoxin Wang} & \\[5pt]
+  2020--2024 & \textbf{B.Sc.\ in Applied Computer Science}, Belgorod State University, Russia & GPA: 3.89/4.0 (\textit{summa cum laude}) \\
+             & Supervisor: Assoc.\ Prof.\ Evgenia Bolgova &
+\end{tabularx}
+
+%=========================  PUBLICATIONS  ========================
+\section*{Selected Publications}
+
+\begin{itemize}[leftmargin=1em,itemsep=5pt]
+  \item \textbf{ViMoE: Vision Mixture of Experts with Multimodal Context Awareness} \\
+        \textit{World Journal of Advanced Research and Reviews} \\
+        \textbf{A.\ Chinda}.
+        \enspace \href{https://arrdel.github.io/vimoe/}{[Project Page]}
+        \enspace \href{https://github.com/arrdel/vimoe}{[Code]}
+
+  \item \textbf{SEEK-Multi: Collaborative Multi-Agent Semantic Reasoning} \\
+        \textit{International Journal of Science and Research Archive} \\
+        \textbf{A.\ Chinda}.
+        \enspace \href{https://arrdel.github.io/seek-multi/}{[Project Page]}
+        \enspace \href{https://github.com/arrdel/seek-multi}{[Code]}
+
+  \item \textbf{Automated Hyperparameter Optimization} --- \textit{World Science: Problems and Innovations} \\
+        A.\ Chinda, M.\ Pamanin.
+
+  \item \textbf{Transformer Architecture in Artificial Intelligence} --- \textit{Global Science} \\
+        A.\ Chinda, V.\ Gromiychuk.
+
+  \item \textbf{Support Vector Machines} --- \textit{Modern Scientific Knowledge} \\
+        A.\ Chinda, N.\ Derevlev.
+
+  \item \textbf{Perceptron-Based Deep Learning: A Literature Review} --- \textit{Global Science} \\
+        A.\ Chinda.
+\end{itemize}
+
+%=========================  PROJECTS  ============================
+\section*{Selected Research Projects}
+
+\begin{description}[leftmargin=0pt,itemsep=6pt]
+  \item[\textbf{HierarchicalVLM: Efficient Long-Context Video Understanding via Hierarchical Temporal Aggregation}] \hfill \\
+  \href{https://arrdel.github.io/hierarchical-vlm/}{\textit{Project Page}} ---
+  Developed a hierarchical temporal aggregation framework for efficient long-context video understanding using vision--language models. \\
+  \textbf{A.\ Chinda}, D.\ Emeka, M.\ Koya, N.\ N.\ Ezekwem.
+
+  \item[\textbf{Contrastive Deep Learning for Variant Detection in Wastewater Genomic Sequencing}] \hfill \\
+  \href{https://arrdel.github.io/genomic_sequence_detection/}{\textit{Project Page}}
+  \enspace \href{https://arxiv.org/abs/2512.03158}{\textit{Arxiv}} ---
+  Built contrastive learning pipelines with VQ-VAE architectures for genomic variant detection in wastewater surveillance data. \\
+  \textbf{A.\ Chinda*}, R.\ Azumah*, H.\ D.\ Venkateswara. \enspace \textit{*Equal contribution}
+
+  \item[\textbf{GraPO: Graph-based Prediction of Power Outages}] \hfill \\
+  \href{https://arrdel.github.io/power-outage-prediction/}{\textit{Project Page}} ---
+  Developed a machine learning framework leveraging spatiotemporal graph neural networks to predict power outages during extreme weather events. \\
+  \textbf{A.\ Chinda}, H.\ Chai, J.\ Morris, J.\ Fassett.
+
+  \item[\textbf{Predicting Hospital Readmission Risk from EHR Data}] \hfill \\
+  \href{https://arrdel.github.io/patient-readmission-prediction/}{\textit{Project Page}} ---
+  Designed experiments comparing classical ML and ensemble methods for healthcare outcome prediction, identifying key features driving early patient readmission. \\
+  \textbf{A.\ Chinda}, O.\ Diallo, Y.\ Mumin.
+
+  \item[\textbf{Knowledge Graph Analysis of Far-Right Networks}] \hfill \\
+  \href{https://arrdel.github.io/iron-march-network-analysis/}{\textit{Project Page}} ---
+  Constructed and analyzed large-scale knowledge graphs to uncover online extremist networks and study their information diffusion and community structures. \\
+  T.\ Hossain, \textbf{A.\ Chinda}.
+\end{description}
+
+%=========================  SKILLS  ==============================
+\section*{Technical Skills}
+
+\begin{multicols}{2}
+  \small
+  \begin{itemize}[leftmargin=*,itemsep=2pt]
+    \item \textbf{Multimodal AI \& Vision--Language:} Vision Transformers (ViT), CLIP, Mixture of Experts (MoE), cross-modal attention, visual grounding, video understanding.
+    \item \textbf{Diffusion Models:} Denoising Diffusion Probabilistic Models (DDPM), latent diffusion, score-based generative models, classifier-free guidance, diffusion for text generation.
+    \item \textbf{Deep Learning \& NLP:} Transformer architectures, large language models (GPT, LLaMA, Mistral), RLHF, LoRA/QLoRA fine-tuning, prompt engineering, tokenization.
+    \item \textbf{Reinforcement Learning:} MDPs, deep RL (PPO, SAC, DQN), imitation learning, reward modeling, PDDL planning.
+    \item \textbf{Multi-Agent Systems:} Collaborative reasoning, semantic communication, tool-augmented LLM agents, chain-of-thought prompting.
+    \item \textbf{Frameworks \& Libraries:} PyTorch, TensorFlow, Hugging Face Transformers \& Diffusers, scikit-learn, DeepSpeed, PEFT, Weights \& Biases.
+    \item \textbf{Simulation \& Embodied AI:} AI2-THOR, Habitat, CARLA, Gazebo.
+    \item \textbf{Infrastructure \& Tools:} Git, Docker, Linux, SLURM, CUDA, distributed training (DDP, FSDP), LaTeX, Jupyter.
+    \item \textbf{Programming Languages:} Python, C++, Java, Kotlin, SQL, Bash.
+    \item \textbf{Research Competencies:} Experiment design, ablation studies, statistical analysis, scientific writing, peer review, academic presentation.
+  \end{itemize}
+\end{multicols}
+
+%=========================  AFFILIATIONS  ========================
+\section*{Affiliations}
+
+\href{https://www.amai-gsu.us/}{Advanced Mobility \& Augmented Intelligence Lab (AMAI)} \hfill
+\href{https://chai.gsu.edu/}{Collaborative Human-AI Center (CHAI)} \\[4pt]
+\href{https://mlcollective.org/}{ML Collective} \hfill
+\href{https://blackinai.org/}{Black in AI} \\[4pt]
+\href{https://nsbe.org/}{National Society of Black Engineers (NSBE)} \hfill
+\href{https://acm.cs.gsu.edu/doku.php?id=current_officers}{Association for Computing Machinery (ACM)}
+
+\vfill
+\begin{center}
+  \footnotesize\color{subtle} Last updated: March 2026
+\end{center}
+
+\end{document}
