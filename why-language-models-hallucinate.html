@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Why language models hallucinate: prediction is not retrieval, fluency is not truth, and what to do about confident wrong answers.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Why language models hallucinate">
+    <meta property="og:description"
+        content="A language model rarely says 'I don't know.' Hallucination is a direct consequence of next-token prediction, and fluency is not a signal of truth.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/why-language-models-hallucinate.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Why language models hallucinate">
+    <meta name="twitter:description"
+        content="A language model rarely says 'I don't know.' Hallucination is a direct consequence of next-token prediction, and fluency is not a signal of truth.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/why-language-models-hallucinate-c16e092253b3">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Why language models hallucinate</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Alignment</span>
+                    <h1>Why language models hallucinate</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 3, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 10 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 3, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/why-language-models-hallucinate-c16e092253b3"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        Ask a language model a question it cannot answer, and it rarely says “I don’t know.” It
+                        answers anyway, fluently, confidently, and sometimes completely wrong. It invents a citation, a
+                        date, a name, or a fact that sounds exactly right until you check it. This behavior has a name,
+                        hallucination, and it is one of the most misunderstood properties of modern language models. It
+                        is not a bug bolted onto an otherwise reliable system. It is a direct consequence of how these
+                        models are built.
+                    </p>
+
+                    <p>
+                        To understand why, you have to start with what a language model actually does. It does not look
+                        things up. It does not check a database before it speaks. It predicts the next token, one piece
+                        of text at a time, choosing the continuation that is most probable given everything that came
+                        before. That is the whole job, and everything else, including the appearance of knowledge,
+                        emerges from it.
+                    </p>
+
+                    <h2>Prediction is not retrieval</h2>
+                    <p>
+                        When a model answers a factual question correctly, it is not recalling a fact in the human
+                        sense. During training, it saw millions of sentences, and its weights adjusted so that certain
+                        patterns of text became likely continuations of other patterns. Ask it about the capital of
+                        France, and “Paris” is the most probable continuation because that pairing appeared over and
+                        over in the training data. The model is not consulting a stored fact. It is reproducing a
+                        statistical regularity.
+                    </p>
+
+                    <p>
+                        This works remarkably well for facts that are common, consistent, and repeated in many
+                        contexts. It breaks down in exactly the situations where a human would hesitate. Rare facts
+                        appear few times in training, so the model’s estimate of the right continuation is weak.
+                        Contradictory facts appear in different contexts, so the model averages over them. And
+                        questions about things that never appeared in training, like a paper published last week or a
+                        person who does not exist, have no correct continuation for the model to find. In all three
+                        cases, the model still has to produce something, because that is what it was trained to do:
+                        always produce the next token.
+                    </p>
+
+                    <p>
+                        The crucial detail is that the model has no built in sense of its own uncertainty that matches
+                        ours. It does produce probabilities over possible next tokens, and sometimes those probabilities
+                        are spread out, which is a signal of uncertainty. But the text it generates does not carry that
+                        signal. When you sample the single most likely continuation at each step, a shaky guess and a
+                        certain fact look identical on the page. Both come out as clean, grammatical sentences. Fluency
+                        is not a signal of truth. It is a signal that the model is good at producing plausible text,
+                        and plausible text is often wrong.
+                    </p>
+
+                    <h2>Why hallucinations sound so convincing</h2>
+                    <p>
+                        A hallucination is rarely random gibberish. It is usually a coherent, well structured answer
+                        that borrows the shape of a correct one. A fabricated citation has a plausible author, a
+                        plausible venue, and a plausible year. A fabricated historical claim fits the style of a
+                        history paragraph. This happens because the model has learned the form of these things very
+                        well, even when it has not learned the content.
+                    </p>
+
+                    <p>
+                        Think of it this way. The model knows what a citation looks like, what a biography paragraph
+                        looks like, and what an explanation of a scientific result looks like. When it needs to fill in
+                        the details and does not have them, it fills them in with the most probable details given the
+                        form. The result reads like a real answer because the structure is real. Only the specifics are
+                        invented.
+                    </p>
+
+                    <p>
+                        This is also why hallucinations get worse when a question is specific and confident. If you ask
+                        a vague question, the model can give a vague answer, and vague answers are hard to get wrong.
+                        If you ask for a specific name, date, or number, there is exactly one right answer and many
+                        plausible wrong ones. The model must commit to one, and the pressure to sound specific pushes
+                        it toward a confident guess rather than a hedged one. Training with human feedback can make
+                        this worse: models are often rewarded for giving helpful, complete sounding answers, and
+                        penalized, implicitly, for refusing or hedging. The system learns that a confident answer is a
+                        good answer, even when the content is wrong.
+                    </p>
+
+                    <p>
+                        There is a second, subtler driver. Language models are trained on text written by humans, and
+                        human text is full of confident assertions. Training data rarely contains sentences like “I am
+                        not sure about this, so I will stop here.” It contains finished articles, confident
+                        explanations, and polished arguments. The model imitates that style. It does not imitate doubt,
+                        because doubt is rarely written down in the form it was trained on.
+                    </p>
+
+                    <h2>Two views of the problem</h2>
+                    <p>
+                        Researchers disagree about how deep the problem runs, and the disagreement matters for what
+                        fixes are worth pursuing.
+                    </p>
+
+                    <p>
+                        One view treats hallucination as a knowledge gap. On this view, the model hallucinates because
+                        it does not know enough, and the fix is more knowledge: bigger models, more training data, or
+                        retrieval systems that let the model look up facts before answering. Retrieval augmented
+                        generation, where the model is given relevant documents and asked to answer from them, is the
+                        most successful version of this idea. When the model has the right document in context, its
+                        answers get much more accurate, because the task shifts from recalling a fact to reading one.
+                        The limitation is that retrieval only helps when the right document exists and is found. For
+                        questions with no clear source, or where the retrieved documents are misleading, the model can
+                        still go wrong, now with a citation attached.
+                    </p>
+
+                    <p>
+                        The other view treats hallucination as a structural property of prediction itself. On this view,
+                        no amount of knowledge fully fixes the problem, because a model that must always produce a next
+                        token will always be able to produce a wrong one, and because some questions have no answer in
+                        any document. The fix, on this view, is not just better knowledge but better calibration:
+                        models that can say “I don’t know,” that can express uncertainty in their answers, and that can
+                        refuse when the evidence is thin. This is harder than it sounds, because teaching a model to
+                        abstain requires training data and rewards that value honesty over helpfulness, and those two
+                        goals are often in tension. A model that refuses too often is useless. A model that never
+                        refuses is untrustworthy.
+                    </p>
+
+                    <p>
+                        Both views have evidence behind them. Retrieval clearly reduces hallucinations on questions
+                        with documented answers. Calibration research clearly shows that models can be trained to
+                        express uncertainty more honestly. The honest summary is that hallucination has more than one
+                        cause, so it will need more than one fix.
+                    </p>
+
+                    <h2>How to read a model’s answer</h2>
+                    <p>
+                        None of this means language models are useless for factual questions. It means they should be
+                        read the way you would read a confident stranger, not the way you would read an encyclopedia.
+                    </p>
+
+                    <p>
+                        First, check the kind of claim. Broad, widely repeated facts are usually safe. Specific names,
+                        dates, numbers, and citations are where hallucinations cluster. If an answer hinges on one
+                        specific detail, verify that detail independently.
+                    </p>
+
+                    <p>
+                        Second, notice whether the answer could have been generated without knowing anything. A summary
+                        that restates your question in polished language, or an explanation that sounds general enough
+                        to fit many cases, may contain no real information at all. Fluency is cheap. Specificity that
+                        checks out is the real signal.
+                    </p>
+
+                    <p>
+                        Third, use the model for what it is good at: drafting, brainstorming, explaining, and
+                        reformatting. For those tasks, a plausible answer is a useful starting point, and errors are
+                        easy to catch. For tasks where a single wrong fact is costly, like medical, legal, or safety
+                        critical decisions, the model is a drafting assistant, not an authority.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        Hallucination matters because it sits at the boundary between capability and trust. Language
+                        models are becoming infrastructure: they draft documents, answer customer questions, summarize
+                        research, and help write code. In all of these roles, a confident wrong answer is more
+                        dangerous than an obvious error, because it passes unnoticed. The more fluent models become,
+                        the harder it gets to tell the difference between a model that knows and a model that is
+                        guessing well.
+                    </p>
+
+                    <p>
+                        The research direction that follows from this is not just “make models bigger.” It is to build
+                        systems that know what they do not know, that can show their sources, and that can separate a
+                        confident answer from a guess in a way the user can see. Until then, the most important skill
+                        for anyone using these models is a simple one: treat fluency as style, not evidence, and check
+                        the specifics. The model will always answer. Whether the answer is true is a question only
+                        evidence can settle.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Kalai, A. T., Nachum, O., Vempala, S. S., and Zhang, E. (2025). Why Language Models
+                            Hallucinate. <a href="https://arxiv.org/abs/2509.04664"
+                                target="_blank">arXiv:2509.04664</a>.</li>
+                        <li>Kalai, A. T., and Vempala, S. S. (2024). Calibrated Language Models Must Hallucinate.</li>
+                        <li>Kadavath, S., et al. (2022). Language Models (Mostly) Know What They Know.
+                            <a href="https://arxiv.org/abs/2207.05221" target="_blank">arXiv:2207.05221</a>.</li>
+                        <li>Lewis, P., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP
+                            Tasks. NeurIPS 2020. <a href="https://arxiv.org/abs/2005.11401"
+                                target="_blank">arXiv:2005.11401</a>.</li>
+                        <li>Huang, L., et al. (2023). A Survey on Hallucination in Large Language Models: Principles,
+                            Taxonomy, Challenges, and Open Questions. <a href="https://arxiv.org/abs/2311.05232"
+                                target="_blank">arXiv:2311.05232</a>.</li>
+                    </ul>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="how-does-rlhf-actually-work.html">How does RLHF actually work, and what does it change?</a></li>
+                    <li><a href="can-we-read-a-models-mind-probing.html">Can we read a model's mind? What probing actually tells us (and what it does not)</a></li>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

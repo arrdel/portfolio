@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="How do multimodal models actually combine text and images? Patches, projections, contrastive alignment, and the three fusion designs, and what each one misses.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How do multimodal models actually combine text and images?">
+    <meta property="og:description"
+        content="A model never sees the image. It reads a sequence of vectors a vision encoder produced, translated into a space built for words.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/how-do-multimodal-models-combine-text-and-images.html">
+    <meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*t6kpUdyKl2y45yfcKbu1RA.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How do multimodal models actually combine text and images?">
+    <meta name="twitter:description"
+        content="A model never sees the image. It reads a sequence of vectors a vision encoder produced, translated into a space built for words.">
+    <meta name="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*t6kpUdyKl2y45yfcKbu1RA.png">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/how-do-multimodal-models-actually-combine-text-and-images-cd68d9998545">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>How do multimodal models actually combine text and images?</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Multimodality</span>
+                    <h1>How do multimodal models actually combine text and images?</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 5, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 14 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 5, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/how-do-multimodal-models-actually-combine-text-and-images-cd68d9998545"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <!-- FIGURES (hotlinked from Medium CDN; at publish time, download to images/multimodal/ and update src):
+                     Pipeline diagram:     https://cdn-images-1.medium.com/max/1024/1*t6kpUdyKl2y45yfcKbu1RA.png
+                     Patch projection:     https://cdn-images-1.medium.com/max/804/1*_wEz1C3Tge2mgBUm3hwmBA.png
+                     Attention:            https://cdn-images-1.medium.com/max/1006/1*JJ3bgddfHQWLrJfZtYPVzg.png
+                     Contrastive loss:     https://cdn-images-1.medium.com/max/647/1*3ab5Gb-dRCDqaJ5r7CDT6Q.png
+                     Three fusion designs: https://cdn-images-1.medium.com/max/1024/1*5GxuX9gbtpsvnYDBx0-uig.png -->
+                <div class="post-content">
+                    <p>
+                        Show a modern model a photo of a kitchen and ask what is on the counter, and it will answer.
+                        It feels like the model can see. It cannot, at least not the way you do. What it can do is
+                        convert an image into the same kind of representation it already uses for text, and then let
+                        the two representations interact inside one system. The trick is not vision. The trick is
+                        translation.
+                    </p>
+
+                    <p>
+                        Here is the whole pipeline in one picture. Everything in this post is a zoomed-in view of one
+                        of these boxes.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*t6kpUdyKl2y45yfcKbu1RA.png"
+                            alt="The standard multimodal pipeline, from pixels to words">
+                        <figcaption>From pixels to words: the standard multimodal pipeline</figcaption>
+                    </figure>
+
+                    <p>
+                        To understand how that works, start with a basic problem. Text and images live in completely
+                        different worlds. Text arrives as a sequence of discrete tokens, each one a word or word
+                        fragment with a fixed identity. An image arrives as a grid of pixels, continuous numbers with
+                        no built in meaning. A language model knows what to do with tokens. It has no idea what to do
+                        with a grid of pixels. So before any reasoning can happen, the image has to be turned into
+                        something token shaped.
+                    </p>
+
+                    <h2>From pixels to patches</h2>
+                    <p>
+                        The first step is to break the image into pieces. Most vision encoders cut the image into a
+                        grid of small square patches, often 14 by 14 or 16 by 16 pixels, and treat each patch as a
+                        unit. Each patch is flattened into a vector of numbers, projected into the model’s working
+                        space, and given a position marker so the model knows where it came from:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/804/1*_wEz1C3Tge2mgBUm3hwmBA.png"
+                            alt="Patch projection with position embedding">
+                        <figcaption>Patch projection: each image patch is flattened, projected, and given a position
+                            embedding</figcaption>
+                    </figure>
+
+                    <p>
+                        Here E is the learned projection, and p_i is the position embedding for patch i. The result is
+                        passed through a neural network, usually a vision transformer, that produces a vector
+                        representation for every patch. These vectors are sometimes called visual tokens, and the name
+                        is deliberate: they are meant to play the same role that word tokens play for text.
+                    </p>
+
+                    <p>
+                        A patch on its own means almost nothing. A 16 by 16 square of brown pixels could be a table, a
+                        dog, or a shadow. Meaning comes from context, and the vision encoder builds that context the
+                        same way a language model builds context for words: self attention. Each patch representation
+                        is updated based on the patches around it, using the same operation that powers language
+                        models:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1006/1*JJ3bgddfHQWLrJfZtYPVzg.png"
+                            alt="Self-attention over image patches">
+                        <figcaption>Self-attention over patches: each patch is updated based on the patches around
+                            it</figcaption>
+                    </figure>
+
+                    <p>
+                        Each patch asks every other patch how relevant it is (the QK term), weights the answers, and
+                        mixes them together. So a patch next to other brown patches in a horizontal line starts to look
+                        like a table edge. After several layers of this, the patch vectors carry information about what
+                        is in the image and where it is, at least in rough form.
+                    </p>
+
+                    <p>
+                        This is the first thing to notice about multimodal models. The model never sees the image. It
+                        sees a set of vectors that summarize the image at patch resolution. Anything smaller than a
+                        patch, or any detail the encoder failed to capture, is simply not available to the rest of the
+                        system. That limitation explains a surprising amount of what these models get wrong.
+                    </p>
+
+                    <h2>The bridge between two worlds</h2>
+                    <p>
+                        Once the image is a set of vectors, the next problem is alignment. The language model was
+                        trained on text, so its internal space is organized around words and their relationships. The
+                        vision encoder was trained on images, so its space is organized around visual patterns. These
+                        two spaces do not match by default. A vector that means “dog” to the vision encoder is just an
+                        arbitrary point to the language model.
+                    </p>
+
+                    <p>
+                        The bridge is usually a small learned module, often just a linear projection or a small
+                        multilayer network, that maps visual vectors into the language model’s space. After this
+                        mapping, the image patches are concatenated with the text tokens into a single sequence, and
+                        the language model processes the whole thing together. From the language model’s point of view,
+                        it is just reading a longer sequence, where some of the tokens came from an image instead of
+                        from text.
+                    </p>
+
+                    <p>
+                        How does the bridge learn the right mapping? The most common answer is contrastive
+                        pretraining, the approach behind CLIP. Take millions of image and caption pairs from the
+                        internet, and train the vision encoder and a text encoder so that the vector for an image ends
+                        up close to the vector for its caption, and far from the vectors for unrelated captions. The
+                        training objective is a contrastive loss over a batch of pairs:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/647/1*3ab5Gb-dRCDqaJ5r7CDT6Q.png"
+                            alt="Contrastive loss over image-caption pairs">
+                        <figcaption>The contrastive loss: matching images with their captions, and pushing apart the
+                            rest</figcaption>
+                    </figure>
+
+                    <p>
+                        For each image I, the loss rewards high similarity with its true caption T and penalizes
+                        similarity with every other caption T_j in the batch. After enough of this, the two spaces line
+                        up: images and text that mean similar things sit near each other.
+                    </p>
+
+                    <p>
+                        This shapes what these models are good at and what they are not. Alignment by caption matching
+                        teaches the model to connect images with the kinds of things people write in captions.
+                        Captions tend to name the main subject, the setting, and the action. They rarely mention how
+                        many windows are in the background, whether the dog is to the left or the right of the chair,
+                        or the exact shade of the wall. So the alignment is strong for the gist of an image and weak
+                        for the details.
+                    </p>
+
+                    <h2>Three ways to put the pieces together</h2>
+                    <p>
+                        Not every multimodal model combines text and images the same way, and the choice is a real
+                        design decision with tradeoffs.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*5GxuX9gbtpsvnYDBx0-uig.png"
+                            alt="Early fusion, cross-attention, and late fusion">
+                        <figcaption>Three ways to combine text and images: early fusion, cross-attention, and late
+                            fusion</figcaption>
+                    </figure>
+
+                    <p>
+                        The first approach is early fusion. The projected image vectors are fed into the language model
+                        together with the text tokens from the very start, and a single transformer processes the
+                        combined sequence. Its strength is flexibility: any token can attend to any other token, so the
+                        model can relate a specific word to a specific image region. Its cost is compute. Images
+                        produce many tokens, often hundreds per image, and attention cost grows with the square of the
+                        sequence length, so a single image can dominate the model’s budget.
+                    </p>
+
+                    <p>
+                        The second approach is cross attention. The language model keeps its own sequence of text
+                        tokens, and at certain layers it is allowed to attend to the image vectors through a separate
+                        attention mechanism. The image is consulted, rather than merged in. This is cheaper and more
+                        modular, since you can swap in a different vision encoder without retraining the whole language
+                        model. The tradeoff is that the interaction is more limited: the text can look at the image,
+                        but the image representations are not updated by the text.
+                    </p>
+
+                    <p>
+                        The third approach is late fusion, where separate models process each modality and their
+                        outputs are combined only at the end. This works for classifying an image with a text label,
+                        but it is a poor fit for open ended generation, because the language model never gets to reason
+                        jointly over the image and the text. Most modern systems have moved away from it.
+                    </p>
+
+                    <p>
+                        These are not abstract options. Flamingo used cross-attention, keeping the language model
+                        frozen and letting it consult the image through gated layers. BLIP-2 used a small querying
+                        transformer as the bridge, distilling the image into a handful of tokens for a frozen language
+                        model. LLaVA took the simplest route, a single linear projection from CLIP features into the
+                        language model’s space, and showed that a small amount of instruction tuning on top was enough
+                        to get a working visual chatbot. Same problem, three different answers about where the two
+                        modalities should meet.
+                    </p>
+
+                    <p>
+                        In practice, early fusion has become the dominant choice for general purpose multimodal models,
+                        because it gives the strongest joint reasoning. But the tradeoff is real, and it is one reason
+                        these models are expensive to run: every image costs hundreds of tokens of attention.
+                    </p>
+
+                    <h2>What the model actually sees, and what it misses</h2>
+                    <p>
+                        Once you know the mechanics, the characteristic failures of multimodal models start to make
+                        sense. They are not random. They follow directly from how the image is represented.
+                    </p>
+
+                    <p>
+                        Counting is a good example. Ask a model how many apples are in a bowl, and it will often get
+                        the number wrong. Counting requires keeping track of individual instances, but the image has
+                        been compressed into patch vectors, and nearby apples may fall into the same patch or blur
+                        together. The model has a rough sense of “several apples” but no reliable count, because the
+                        representation it works with does not preserve that information cleanly.
+                    </p>
+
+                    <p>
+                        Spatial relations fail for a similar reason. “Is the cup to the left of the plate?” is a hard
+                        question for a model that represents the image as patch vectors with only approximate position
+                        information. Small objects, fine text, and subtle differences between similar objects suffer
+                        most. A model can tell you a photo shows a street scene, but it may miss the small sign in the
+                        background or misread a number on a jersey.
+                    </p>
+
+                    <p>
+                        There is also a subtler bias. Because the language model is far larger than the vision encoder,
+                        and because text dominates its training, the model often leans on language priors instead of
+                        looking carefully at the image. Ask it about a photo of a blue banana, and it may answer as if
+                        the banana were yellow, because “banana” is so strongly associated with yellow in text that the
+                        prior overrides the visual evidence. Researchers call this language bias, and it is one of the
+                        main reasons multimodal models can seem to ignore what is right in front of them.
+                    </p>
+
+                    <h2>Two views of what is happening</h2>
+                    <p>
+                        There is a genuine debate about whether this architecture amounts to understanding, and it is
+                        worth stating both sides plainly.
+                    </p>
+
+                    <p>
+                        One view says that aligning image and text vectors in a shared space is a real form of
+                        grounding. The model is learning a representation where visual and linguistic information about
+                        the same concept coincide, and that shared representation lets it answer questions, describe
+                        scenes, and reason about images in ways that transfer to new examples. On this view, the
+                        failures are engineering problems: better encoders, higher resolution, more careful training,
+                        and the model will keep getting closer to genuinely seeing.
+                    </p>
+
+                    <p>
+                        The other view says the model is matching patterns across modalities without building the kind
+                        of structured understanding that vision requires. It can tell you what is in a photo because it
+                        has learned statistical associations between image features and words, not because it has a
+                        model of the scene with objects, positions, and relationships. On this view, the counting and
+                        spatial failures are not bugs to be patched. They are symptoms of an architecture designed for
+                        language that had vision bolted on, and real progress may require representing spatial structure
+                        explicitly rather than squeezing it into token vectors.
+                    </p>
+
+                    <p>
+                        Both views have evidence. Multimodal models are genuinely useful, and they keep improving on
+                        benchmarks that test visual understanding. At the same time, their failures cluster exactly
+                        where a structured scene representation would help, and where a bag of patch vectors would
+                        struggle. The honest summary is that current models are very good at recognizing and
+                        describing, and much weaker at the kind of precise, structured perception that humans do
+                        without thinking.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        Multimodality matters because the world is not text. Most of the information humans use to
+                        reason comes through vision: diagrams, charts, photographs, handwriting, the layout of a page.
+                        A model that can only read text is cut off from most of that. Bringing images into the same
+                        reasoning system is what lets a model read a graph, check a screenshot, or help with a problem
+                        written on a whiteboard.
+                    </p>
+
+                    <p>
+                        It also matters for the research direction that follows. If the failures come from how images
+                        are compressed into tokens, then the interesting questions are about representation: how much
+                        detail should survive, how should position be encoded, and when should the model be allowed to
+                        look again at the raw image instead of relying on a compressed summary. Some of the most active
+                        work in the field is exactly here, giving models tools to zoom in, to attend to regions, or to
+                        reason over images in multiple passes rather than a single forward sweep. A multimodal model
+                        does not see a photo. It reads a sequence of vectors that a vision encoder produced from a
+                        photo, translated by a learned bridge into a space built for words. Everything it can do with
+                        an image, and everything it cannot, follows from that fact.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Dosovitskiy, A., et al. (2020). An Image is Worth 16x16 Words: Transformers for Image
+                            Recognition at Scale. <a href="https://arxiv.org/abs/2010.11929"
+                                target="_blank">arXiv:2010.11929</a>. The vision transformer: images as sequences of
+                            patch tokens.</li>
+                        <li>Radford, A., et al. (2021). Learning Transferable Visual Models From Natural Language
+                            Supervision. <a href="https://arxiv.org/abs/2103.00020"
+                                target="_blank">arXiv:2103.00020</a>. CLIP and the contrastive alignment behind the
+                            bridge.</li>
+                        <li>Alayrac, J.-B., et al. (2022). Flamingo: A Visual Language Model for Few-Shot Learning.
+                            <a href="https://arxiv.org/abs/2204.14198" target="_blank">arXiv:2204.14198</a>. The
+                            cross-attention design.</li>
+                        <li>Li, J., et al. (2023). BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image
+                            Encoders and Large Language Models. <a href="https://arxiv.org/abs/2301.12597"
+                                target="_blank">arXiv:2301.12597</a>. The querying transformer bridge.</li>
+                        <li>Liu, H., et al. (2023). Visual Instruction Tuning. <a
+                                href="https://arxiv.org/abs/2304.08485" target="_blank">arXiv:2304.08485</a>. LLaVA,
+                            the simple projection plus instruction tuning recipe.</li>
+                    </ul>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="draco-visual-chain-of-thought.html">DraCo: Revolutionizing Text-to-Image Generation with Visual Chain-of-Thought</a></li>
+                    <li><a href="can-we-read-a-models-mind-probing.html">Can we read a model's mind? What probing actually tells us (and what it does not)</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Do diffusion models actually reason, or just denoise? The case for trajectories as reasoning, the case for early commitment and rationalization, and the experiments that would settle it.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Do diffusion models actually reason, or just denoise?">
+    <meta property="og:description"
+        content="Diffusion models pass through dozens of intermediate states before answering. Is the trajectory doing reasoning work, or just converging to a sample?">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/do-diffusion-models-actually-reason-or-just-denoise.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Do diffusion models actually reason, or just denoise?">
+    <meta name="twitter:description"
+        content="Diffusion models pass through dozens of intermediate states before answering. Is the trajectory doing reasoning work, or just converging to a sample?">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/do-diffusion-models-actually-reason-or-just-denoise-de730f39a9ca">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Do diffusion models actually reason, or just denoise?</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Diffusion, Reasoning</span>
+                    <h1>Do diffusion models actually reason, or just denoise?</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> October 24, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 9 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on October 24, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/do-diffusion-models-actually-reason-or-just-denoise-de730f39a9ca"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        Autoregressive models generate by sampling from $p(x_t | x_{&lt;t})$, one token at a time,
+                        with no mechanism for revising a token once it is committed. Discrete diffusion language models
+                        replace that process with iterative refinement: start from a fully masked sequence and
+                        repeatedly apply a learned denoiser to unmask positions in parallel. The question this raises
+                        is not rhetorical. If a model passes through dozens of intermediate states before producing its
+                        final answer, is the trajectory doing computational work that deserves the name reasoning, or is
+                        it just converging to a sample?
+                    </p>
+
+                    <h2>The mechanics, briefly</h2>
+                    <p>
+                        In absorbing-state discrete diffusion, the forward process progressively replaces tokens with a
+                        mask token according to a noise schedule, until the sequence is fully masked. The learned
+                        reverse process, the denoiser, predicts the clean sequence from the noisy one. Generation runs
+                        this in reverse: at each step, the model scores all masked positions, unmasks a subset
+                        (usually the highest-confidence predictions, under some unmasking policy), and optionally
+                        remasks low-confidence positions for reconsideration.
+                    </p>
+
+                    <p>
+                        Two properties distinguish this from autoregressive decoding. First, prediction is
+                        bidirectional: a token can be conditioned on both left and right context as it emerges. Second,
+                        the process is revisable: a position unmasked at step $t$ can be remasked and changed at step
+                        $t+k$. The number of function evaluations (NFE) becomes a compute knob that autoregressive
+                        decoding does not have. More steps means more chances to revise, at the cost of more compute.
+                    </p>
+
+                    <p>
+                        So the trajectory, the sequence of intermediate states $x_T, x_{T-1}, …, x_0$, is a real object
+                        with structure. The question is whether that structure is doing reasoning work.
+                    </p>
+
+                    <h2>The case for yes: trajectories carry information</h2>
+                    <p>
+                        There is evidence that intermediate states are not just noisy versions of the final answer.
+                        Three observations matter:
+                    </p>
+
+                    <ol>
+                        <li><strong>Corrections happen.</strong> A position unmasked early with the wrong token can be
+                            remasked and corrected once surrounding context sharpens. The final answer depends on the
+                            path, not just the endpoint distribution.</li>
+                        <li><strong>Compute scales with steps.</strong> Up to a point, increasing NFE improves output
+                            quality, which means later steps are adding information rather than merely resampling.</li>
+                        <li><strong>Unmasking policy matters.</strong> Which positions you unmask, and in what order,
+                            changes both accuracy and efficiency. If the trajectory were epiphenomenal, the policy
+                            would not matter. Recent work on learned unmasking policies shows it matters a lot: a small
+                            learned policy can push the accuracy-per-NFE frontier outward on models like LLaDA-8B and
+                            transfer to Dream-7B.</li>
+                    </ol>
+
+                    <p>
+                        This is the motivation behind trajectory-level evaluation: instead of grading only the final
+                        sample, study the path. Where does the model commit? Where does it revise? Which steps change
+                        the answer, and which only change the wording?
+                    </p>
+
+                    <h2>The case for no: early commitment and rationalization</h2>
+                    <p>
+                        The counterevidence is serious. A March 2026 study of masked diffusion models found that
+                        verdicts on reasoning tasks frequently converge very early in the trajectory, with remaining
+                        steps largely elaborating or justifying the early commitment rather than reopening it. More
+                        damning, when researchers forced longer deliberation before commitment, accuracy dropped from
+                        86.2 percent to 71.9 percent. Forcing the model to “think longer” made it worse.
+                    </p>
+
+                    <p>
+                        That pattern has a name in human cognition: rationalization. The system picks an answer, then
+                        spends its remaining budget making the answer look well-supported. The trajectory looks like
+                        deliberation, but the decision was already made. If the intermediate steps cannot change the
+                        outcome, they are not reasoning steps, no matter how fluent they look.
+                    </p>
+
+                    <p>
+                        There is a second, subtler problem. In autoregressive models, chain-of-thought tokens are at
+                        least causally upstream of the answer: the answer is conditioned on them. In diffusion models,
+                        the “reasoning” is distributed across the trajectory, and there is no clean separation between
+                        the deliberation and the answer itself. The model is not thinking and then answering. It is
+                        answering continuously, and we are retroactively calling part of that process thinking.
+                    </p>
+
+                    <h2>What would settle it: interventions, not vibes</h2>
+                    <p>
+                        This is where the debate needs to move from interpretation to measurement. Three kinds of
+                        experiments would actually discriminate reasoning from rationalization:
+                    </p>
+
+                    <ol>
+                        <li><strong>Trajectory interventions.</strong> Perturb an intermediate state (for example,
+                            force a different token at a position the model had settled) and see whether downstream
+                            steps recover, propagate the error, or converge to a genuinely different answer. A reasoning
+                            process should show structured recovery, not collapse or blind persistence.</li>
+                        <li><strong>Step-ablation curves.</strong> Measure accuracy as a function of NFE, but per task
+                            type. If additional steps help on tasks requiring multi-step inference and hurt on tasks
+                            requiring a single judgment, that tells you something about what the steps are doing.</li>
+                        <li><strong>Commitment-point analysis.</strong> Identify the step at which the final answer
+                            becomes predictable from the trajectory, and measure how much of the remaining compute
+                            changes anything. A model that commits at step 5 of 50 and then decorates is not
+                            deliberating for 45 steps.</li>
+                    </ol>
+
+                    <p>
+                        My own view, and the direction of my current research, is that today’s diffusion LMs sit
+                        between the two poles. They do genuine revision, and unmasking policy results show the path is
+                        load-bearing. But they also commit early and rationalize, and the forced-deliberation result
+                        should worry anyone who assumes more steps equals more thought. The honest summary: diffusion
+                        models have a substrate on which reasoning could be built, and a trajectory that sometimes does
+                        real work, but we do not yet have the evaluations to say how often, or on which tasks.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        If you are building diffusion LMs, this distinction decides where your compute goes. Scaling
+                        NFE is cheap to implement and easy to benchmark, but if most steps are rationalization, you are
+                        burning compute on decoration. The higher-leverage direction is understanding the trajectory:
+                        better unmasking policies, better remasking criteria, and evaluations that reward models whose
+                        intermediate steps actually change outcomes for the better. That is the difference between a
+                        model that looks like it reasons and one that does.
+                    </p>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="same-accuracy-different-trajectory.html">Same accuracy, different trajectory: measuring reasoning in diffusion language models</a></li>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="can-we-read-a-models-mind-probing.html">Can we read a model's mind? What probing actually tells us (and what it does not)</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

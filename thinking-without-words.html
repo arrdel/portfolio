@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning. What each style of machine reasoning hides.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning">
+    <meta property="og:description"
+        content="Chain-of-thought is the default way we judge reasoning, but models can also reason in hidden states or across a diffusion trajectory. What each style hides.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/thinking-without-words.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning">
+    <meta name="twitter:description"
+        content="Chain-of-thought is the default way we judge reasoning, but models can also reason in hidden states or across a diffusion trajectory. What each style hides.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/thinking-without-words-verbal-chain-of-thought-vs-latent-and-trajectory-based-reasoning-2b34a7693000">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Reasoning, Diffusion</span>
+                    <h1>Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> October 27, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 10 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on October 27, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/thinking-without-words-verbal-chain-of-thought-vs-latent-and-trajectory-based-reasoning-2b34a7693000"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        When a language model solves a hard problem, we usually watch it think in words. It writes out
+                        steps, one token at a time, and then gives an answer. That visible reasoning, called
+                        chain-of-thought, has become the default way we judge whether a model is really reasoning. But
+                        it is not the only way a model can think. A model can also reason in its hidden states, in
+                        continuous vectors that never become words, or across the intermediate states of a diffusion
+                        trajectory that revises itself as it goes.
+                    </p>
+
+                    <p>
+                        The question is not which style looks more like thinking. It is what each style hides, and what
+                        we lose when we can only see one of them.
+                    </p>
+
+                    <h2>Verbal chain-of-thought: thinking you can read</h2>
+                    <p>
+                        Verbal chain-of-thought works because it turns reasoning into generation. The model produces
+                        intermediate tokens, and each new token is conditioned on the ones before it. That gives
+                        reasoning three useful properties.
+                    </p>
+
+                    <p>
+                        First, it is inspectable. You can read the steps, find where they go wrong, and grade them.
+                        Second, it is intervenable. You can edit a step, prompt the model to reconsider, or ask it to
+                        check its own work. Third, it is compositional in a familiar way. Steps can be reused, quoted,
+                        and checked by another model or by a person.
+                    </p>
+
+                    <p>
+                        That readability is also the source of its main weakness. Words are a bottleneck. A model must
+                        compress whatever it computed internally into a sequence of discrete tokens, in a single order,
+                        at a fixed granularity. Some computations do not fit that shape well. A geometric intuition, a
+                        probability distribution over alternatives, or a partial result that is still uncertain may have
+                        no clean verbal form, and forcing one can distort it.
+                    </p>
+
+                    <p>
+                        There is a deeper problem too. A verbal chain of thought is generated, not observed. The model
+                        is producing text that looks like reasoning, and the final answer is conditioned on that text,
+                        but that does not guarantee the text caused the answer in the way it appears to. Research on
+                        faithfulness has repeatedly found cases where models give the right answer for the wrong stated
+                        reason, or change their stated reasoning while keeping the answer fixed. The steps can be a
+                        rationalization written after the conclusion was already favored, rather than the path that
+                        produced it.
+                    </p>
+
+                    <p>
+                        So verbal reasoning hides two things: the computation that did not fit into words, and the gap
+                        between the story the model tells and the computation it actually performed.
+                    </p>
+
+                    <h2>Latent and trajectory-based reasoning: thinking you cannot read</h2>
+                    <p>
+                        Latent reasoning skips the verbal bottleneck. Instead of writing steps, the model reasons in
+                        continuous hidden states, sometimes called latent thoughts, and only decodes an answer at the
+                        end. A related idea appears in diffusion language models. There, generation is an iterative
+                        trajectory: the model starts from a masked sequence and repeatedly refines it. The intermediate
+                        states of that trajectory are a kind of reasoning trace, but they are not sentences. They are
+                        partial answers in various stages of revision.
+                    </p>
+
+                    <p>
+                        This style has real advantages. It avoids the cost of generating many reasoning tokens, and it
+                        avoids forcing every intermediate idea into language. A diffusion trajectory can also revise
+                        itself. A token committed early can be remasked and changed once the surrounding context
+                        sharpens, which a left to right chain of thought cannot do without starting over or adding an
+                        explicit correction step.
+                    </p>
+
+                    <p>
+                        But what it gains in flexibility, it loses in auditability. You cannot read a hidden vector the
+                        way you read a sentence. You can probe it, decode it, or perturb it, and each of those methods
+                        tells you something, but none of them gives you the clean, checkable record that a verbal trace
+                        promises. The trajectory of a diffusion model is more inspectable than a single hidden state,
+                        since you can watch tokens appear and change, yet it still lacks a clean separation between
+                        deliberation and answer. The model is answering continuously, and we are the ones deciding
+                        which part of that process counts as thinking.
+                    </p>
+
+                    <p>
+                        Latent reasoning therefore hides something different: the reasoning itself. When a latent model
+                        is wrong, it is harder to say where it went wrong, whether it considered an alternative, or
+                        whether an intervention would have helped. When it is right, it is harder to say why, or
+                        whether it would be right again on a slightly different problem.
+                    </p>
+
+                    <h2>The real trade-off</h2>
+                    <p>
+                        It is tempting to frame this as a contest, with one style winning. The more honest framing is a
+                        trade-off between expressiveness, efficiency, and accountability.
+                    </p>
+
+                    <p>
+                        Verbal reasoning is accountable but lossy. It gives us a record we can check, at the price of
+                        forcing thought through language and trusting a record that may be partly invented.
+                    </p>
+
+                    <p>
+                        Latent reasoning is expressive and efficient but opaque. It lets the model use its full
+                        internal representation, at the price of a record we cannot directly read.
+                    </p>
+
+                    <p>
+                        Trajectory-based reasoning sits between the two. A diffusion trajectory is partly readable,
+                        because tokens appear and change over time, and partly opaque, because there is no labeled
+                        boundary between thinking and answering. That in-between position is why it is interesting to
+                        study. It may offer a way to keep some revisability and efficiency while recovering some
+                        inspectability, if we learn to read trajectories properly.
+                    </p>
+
+                    <h2>What would settle it</h2>
+                    <p>
+                        Three kinds of experiments would move this debate from preference to evidence.
+                    </p>
+
+                    <p>
+                        First, causal interventions. Perturb a latent state, or force a different token
+                        mid-trajectory, and see whether the model recovers, propagates the error, or reaches a
+                        genuinely different answer. A reasoning process should show structured recovery, not collapse or
+                        blind persistence.
+                    </p>
+
+                    <p>
+                        Second, decoding and probing. Train probes to read latent states, or decode them into words,
+                        and test whether the decoded content predicts the final answer better than chance, and whether
+                        editing the decoded content changes the answer. If the latent content is causally upstream of
+                        the answer, that is evidence it is doing work rather than decorating it.
+                    </p>
+
+                    <p>
+                        Third, commitment-point analysis. Find the point in a verbal chain, a latent trajectory, or a
+                        diffusion trajectory after which the final answer becomes predictable, and measure how much of
+                        the remaining compute changes anything. A model that commits early and then decorates is not
+                        deliberating for the rest of its budget, whatever its trace looks like.
+                    </p>
+
+                    <p>
+                        My own view is that neither style is the true form of machine reasoning, and that is the point.
+                        Verbal chains are a useful interface, not a transparent window. Latent states are a useful
+                        substrate, not a guarantee of thought. The research problem is to build evaluations that test
+                        whether intermediate computation, in whatever form, actually changes outcomes for the better,
+                        and to build methods that let us intervene on it when it does not.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        If you are building models, this choice decides where your compute and your trust go. Scaling
+                        verbal reasoning is easy to benchmark and easy to demo, but if many of those tokens are
+                        rationalization, you are paying for decoration. Scaling latent reasoning is efficient, but if
+                        you cannot audit it, you cannot deploy it in settings where a wrong answer needs an
+                        explanation, or where a failure needs a diagnosis.
+                    </p>
+
+                    <p>
+                        The higher-leverage direction is not to pick a side. It is to make each style more honest:
+                        verbal traces that are checked for faithfulness, latent methods that can be probed and
+                        intervened on, and trajectories whose commitment points are measured rather than assumed. A
+                        model that reasons well should be able to show its work when asked, revise its work when
+                        wrong, and do useful work that never needed words in the first place. We do not yet have all
+                        three in one system, and closing that gap is the interesting problem.
+                    </p>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                    <li><a href="same-accuracy-different-trajectory.html">Same accuracy, different trajectory: measuring reasoning in diffusion language models</a></li>
+                    <li><a href="can-we-read-a-models-mind-probing.html">Can we read a model's mind? What probing actually tells us (and what it does not)</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Same accuracy, different trajectory: measuring reasoning in diffusion language models. Traj-eval scores the trajectory, not just the final answer.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Same accuracy, different trajectory: measuring reasoning in diffusion language models">
+    <meta property="og:description"
+        content="Final-answer accuracy gives three very different models the same score. Traj-eval scores the trajectory instead.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/same-accuracy-different-trajectory.html">
+    <meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*v095i7Crrvrca8OiIqYzxQ.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Same accuracy, different trajectory: measuring reasoning in diffusion language models">
+    <meta name="twitter:description"
+        content="Final-answer accuracy gives three very different models the same score. Traj-eval scores the trajectory instead.">
+    <meta name="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*v095i7Crrvrca8OiIqYzxQ.png">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/same-accuracy-different-trajectory-measuring-reasoning-in-diffusion-language-models-c12bb874fd2a">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Same accuracy, different trajectory: measuring reasoning in diffusion language models</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Diffusion, Reasoning</span>
+                    <h1>Same accuracy, different trajectory: measuring reasoning in diffusion language models</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 14, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 5 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 14, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/same-accuracy-different-trajectory-measuring-reasoning-in-diffusion-language-models-c12bb874fd2a"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Featured Image -->
+                <!-- IMAGE (hotlinked from Medium CDN; at publish time, download to images/traj_eval/ and update src):
+                     https://cdn-images-1.medium.com/max/1024/1*v095i7Crrvrca8OiIqYzxQ.png -->
+                <figure class="post-featured-image">
+                    <img src="https://cdn-images-1.medium.com/max/1024/1*v095i7Crrvrca8OiIqYzxQ.png"
+                        alt="A diffusion model's verdict trajectory across denoising steps">
+                    <figcaption>The trajectory of a model's verdict across denoising steps</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <h2>The accuracy number is not the whole story</h2>
+                    <p>
+                        Take two language models. Both score 88 percent on the same benchmark. Are they equally good
+                        at reasoning?
+                    </p>
+
+                    <p>
+                        Not necessarily. One may work through the problem step by step and settle on the answer. The
+                        other may pick an answer in the first few steps and spend the rest of its output justifying a
+                        choice it already made. A third may flip between answers the whole way and happen to land on
+                        the right one at the end. Final-answer accuracy gives all three the same score.
+                    </p>
+
+                    <p>
+                        This matters more for diffusion language models than for ordinary autoregressive models. A
+                        diffusion model does not write left to right. It starts from a fully masked answer and refines
+                        it over hundreds of denoising steps. That gives us something an autoregressive model does not:
+                        a visible trajectory of the answer forming. At every step we can ask, what does the model
+                        believe right now? When did that belief lock in? Did it ever change?
+                    </p>
+
+                    <p>
+                        I built traj-eval to answer those questions. It is an open source toolkit that scores the
+                        trajectory, not just the final answer.
+                    </p>
+
+                    <h2>What it measures</h2>
+                    <p>
+                        traj-eval treats each denoising run as a sequence of verdicts, one per step, and computes a
+                        small set of interpretable quantities:
+                    </p>
+
+                    <p>
+                        <strong>Verdict convergence step.</strong> The first step after which the verdict stops
+                        changing. A model that knows the answer immediately converges at step 3 or 4. A model that is
+                        still working converges at step 190.
+                    </p>
+
+                    <p>
+                        <strong>Flip rate.</strong> How often the verdict changes between consecutive steps. Genuine
+                        reasoning changes its mind a few times and then settles. Oscillation flips repeatedly and never
+                        settles.
+                    </p>
+
+                    <p>
+                        <strong>Rationalization components.</strong> Three numbers, reported separately and labeled as
+                        a heuristic, not a proof. Early factor: how much of the reasoning text appears after the
+                        verdict is already fixed. Post-change rate: how much the text keeps changing after the verdict
+                        stops changing. Length growth: how much the text grows after convergence. When all three are
+                        high, the trajectory looks like rationalization: answer first, reasoning after. The scalar
+                        score is gated, so a trajectory with no real commitment cannot score high by accident.
+                    </p>
+
+                    <p>
+                        <strong>Commitment clocks.</strong> The step where the answer commits, the lag between
+                        commitment and stability, and how much reasoning is still unwritten when the answer converges.
+                    </p>
+
+                    <p>
+                        One rule runs through all of it: a step with no verdict yet is recorded as no verdict, not as
+                        a change of mind. That sounds trivial, but it is the difference between measuring reasoning and
+                        measuring noise.
+                    </p>
+
+                    <h2>What we found</h2>
+                    <p>
+                        We ran three open checkpoints on 64 items each from ARC-Challenge and GSM8K, in two conditions:
+                        direct answering, and step-by-step reasoning with a canonical prompt.
+                    </p>
+
+                    <p>
+                        On Dream-7B, ARC-Challenge, reasoning made accuracy worse:
+                    </p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Condition</th>
+                                <th>Accuracy</th>
+                                <th>Mean convergence step</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dream-7B</td>
+                                <td>Direct</td>
+                                <td>0.8906</td>
+                                <td>3.8</td>
+                            </tr>
+                            <tr>
+                                <td>Dream-7B</td>
+                                <td>Reasoning</td>
+                                <td>0.8281</td>
+                                <td>189.5</td>
+                            </tr>
+                            <tr>
+                                <td>LLaDA-8B-Instruct</td>
+                                <td>Direct</td>
+                                <td>0.875</td>
+                                <td>4.5</td>
+                            </tr>
+                            <tr>
+                                <td>LLaDA-8B-Instruct</td>
+                                <td>Reasoning</td>
+                                <td>0.9062</td>
+                                <td>32.1</td>
+                            </tr>
+                            <tr>
+                                <td>LLaDA-1.5</td>
+                                <td>Direct</td>
+                                <td>0.875</td>
+                                <td>7.4</td>
+                            </tr>
+                            <tr>
+                                <td>LLaDA-1.5</td>
+                                <td>Reasoning</td>
+                                <td>0.9219</td>
+                                <td>21.7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>
+                        The same intervention, the same benchmark, opposite results. That is exactly what a trajectory
+                        metric is for. On Dream, the direct answer locks in by step 4 on average, so there is almost
+                        no reasoning trajectory to measure, and asking for reasoning hurts. On LLaDA, reasoning helps,
+                        and the trajectory shows real deliberation before convergence.
+                    </p>
+
+                    <p>
+                        On GSM8K, Dream scores 0.7656 and LLaDA scores 0.6562 on the numeric condition.
+                    </p>
+
+                    <p>
+                        The rationalization components tell the same story from the other side, on Dream only. Direct
+                        answering has an early factor of 0.9852 and a post-change rate of 0.0001: the verdict is fixed
+                        almost immediately and the text barely changes after. Reasoning has an early factor of 0.2559
+                        and a post-change rate of 0.1597: the verdict forms late and the text keeps developing. One of
+                        these looks like reasoning. The other looks like an answer with a justification attached.
+                    </p>
+
+                    <h2>One trajectory, two conditions</h2>
+                    <p>
+                        The clearest example is a single ARC-Challenge item. With step-by-step reasoning, the verdict
+                        moves from no verdict, to A, to C across the denoising steps, then stays at C. With direct
+                        answering on a comparable item, the verdict locks in at C almost immediately and never moves.
+                    </p>
+
+                    <p>
+                        Same final answer. Completely different process. If you only record the final letter, you
+                        cannot tell them apart.
+                    </p>
+
+                    <h2>Try it</h2>
+                    <p>
+                        traj-eval is MIT licensed, needs only Python 3.10 and numpy, and runs a demo with no model
+                        weights:
+                    </p>
+
+                    <pre><code>pip install -e .
+python -m traj_eval demo</code></pre>
+
+                    <p>
+                        You can score your own trajectories from a JSONL file, compare direct and reasoning
+                        conditions, and get the same tables and plots. The project page has the full results and an
+                        interactive trajectory explorer:
+                    </p>
+
+                    <ul>
+                        <li>Project page: <a href="https://arrdel.github.io/traj-eval/"
+                                target="_blank">https://arrdel.github.io/traj-eval/</a></li>
+                        <li>Code: <a href="https://github.com/arrdel/traj-eval"
+                                target="_blank">https://github.com/arrdel/traj-eval</a></li>
+                        <li>Data and explorer: <a
+                                href="https://huggingface.co/collections/arrdel/traj-eval-diffusion-lm-reasoning-trajectories"
+                                target="_blank">https://huggingface.co/collections/arrdel/traj-eval-diffusion-lm-reasoning-trajectories</a>
+                        </li>
+                    </ul>
+
+                    <h2>Does it scale?</h2>
+                    <p>
+                        Yes, and we checked before claiming it. The framework was stress tested on the full
+                        ARC-Challenge test set (1,172 items) and the full GSM8K test set (1,319 items), plus a
+                        synthetic 10,000-trajectory file. Scoring 1,000 trajectories takes 4.3 seconds on CPU, and
+                        10,000 takes about 34 seconds, inside a pre-registered budget of 10 minutes and 4 GB of
+                        memory. The full report is in the repo.
+                    </p>
+
+                    <h2>Honest caveats</h2>
+                    <p>
+                        Three things this does not claim. First, the metrics are descriptive, not causal proof. A high
+                        rationalization score means a trajectory looks like rationalization by this operational
+                        definition, not that the model was proven to rationalize. Second, the headline model numbers
+                        are 64-item suites, which are enough to show the patterns and the method, not to rank models
+                        definitively. Third, the rationalization components are reported for Dream only; the LLaDA
+                        values have not been checked against the definition and are deliberately left out.
+                    </p>
+
+                    <h2>What comes next</h2>
+                    <p>
+                        The next step is scale: the same measurement applied at full scale, with the trajectory as the
+                        object of study rather than the final answer. The toolkit is the first piece. If you work on
+                        diffusion language models, reasoning evaluation, or interpretability, try it and tell me where
+                        it breaks. That is the point of putting it out in the open.
+                    </p>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="can-we-read-a-models-mind-probing.html">Can we read a model's mind? What probing actually tells us (and what it does not)</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

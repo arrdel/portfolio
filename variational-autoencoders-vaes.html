@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Variational Autoencoders (VAEs): learning a data distribution by approximating an intractable posterior with variational inference, the ELBO, and the reparameterization trick.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Variational Autoencoders (VAEs)">
+    <meta property="og:description"
+        content="Variational autoencoders learn a distribution by approximating an intractable posterior with variational inference, the ELBO, and the reparameterization trick.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/variational-autoencoders-vaes.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Variational Autoencoders (VAEs)">
+    <meta name="twitter:description"
+        content="Variational autoencoders learn a distribution by approximating an intractable posterior with variational inference, the ELBO, and the reparameterization trick.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/variational-autoencoders-vaes-545d7ab57541">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Variational Autoencoders (VAEs)</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Generative Models</span>
+                    <h1>Variational Autoencoders (VAEs)</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> August 16, 2025</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 11 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on August 16, 2025.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/variational-autoencoders-vaes-545d7ab57541"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <!-- FIGURES (hotlinked from Medium CDN; at publish time, download to images/vae/ and update src).
+                     NOTE: the equations in this post are images on Medium. Their placement below follows the
+                     RSS order; images 46-48 sit between the ELBO paragraphs and their exact positions should
+                     be verified against the live Medium page before publishing.
+                     35: https://cdn-images-1.medium.com/max/1024/1*S3NH77hAZuLWwJG1IilaMg.png
+                     36: https://cdn-images-1.medium.com/max/1024/1*6FHRGv9dosU0etI67-d1Nw.png
+                     37: https://cdn-images-1.medium.com/max/1024/1*M57C9z5Dpr8tbJUCoKsBdQ.png
+                     38: https://cdn-images-1.medium.com/max/1024/1*I_SeOrbUhuzD1aQf54yGig.png
+                     39: https://cdn-images-1.medium.com/max/386/1*C_klqVObo_6DkKThEEiKew.png
+                     40: https://cdn-images-1.medium.com/max/1024/1*PLALdr1m7eMFbtseEz44GQ.png
+                     41: https://cdn-images-1.medium.com/max/735/1*4x7hB7l8yM9bsXf9AKO4gQ.png
+                     42: https://cdn-images-1.medium.com/max/1024/1*ZWJp5d9Me6FQmgBi1QKCSA.png
+                     43: https://cdn-images-1.medium.com/max/786/1*cCGF27oy9hBaIReA02qBDA.png
+                     44: https://cdn-images-1.medium.com/max/424/1*VEER3M9ZBv8vqvrv7WctPg.png
+                     45: https://cdn-images-1.medium.com/max/500/1*LXE7SrzjWp5AaiY48iHUdw.png
+                     46: https://cdn-images-1.medium.com/max/671/1*fF1V75imwJ6d8gkVBM3tZw.png
+                     47: https://cdn-images-1.medium.com/max/596/1*_oo8jkCObJXH4VfpYus8WA.png
+                     48: https://cdn-images-1.medium.com/max/745/1*ta77DXdOWKuHfOaVe-ct0A.png
+                     49: https://cdn-images-1.medium.com/max/569/1*v082-EWMChPRYWboGH1o-Q.png
+                     50: https://cdn-images-1.medium.com/max/1024/1*IB05bi0WudF4gQbCEb2P8g.png
+                     51: https://cdn-images-1.medium.com/max/528/1*HbkLiw1QwBpbinXeqMY40Q.png -->
+                <div class="post-content">
+                    <p>
+                        Variational Autoencoders (VAEs) are a class of generative models capable of learning complex
+                        data distributions and generating synthetic samples. Unlike discriminative models (e.g.,
+                        classifiers), VAEs focus on modeling the probability distribution of the data.
+                    </p>
+
+                    <p>
+                        Assuming the data we observe is generated from some unknown <em>true distribution</em>
+                        <em>p</em>∗. We use a <em>parametric probabilistic model</em> <em>pθ</em> to model the data,
+                        where <em>θ</em> represents the model’s parameters. The goal is to make <em>pθ</em> as close
+                        as possible to <em>p</em>∗.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*S3NH77hAZuLWwJG1IilaMg.png"
+                            alt="The true data distribution and the parametric model">
+                    </figure>
+
+                    <p>
+                        For a given data point <em>x</em>, the term <em>pθ</em>(<em>x</em>) represents the
+                        <em>likelihood</em> — the probability (or probability density) assigned to <em>x</em> by the
+                        model under parameters <em>θ</em>. When we have a dataset
+                        <em>D</em>={<em>x</em>1,<em>x</em>2,…,<em>xN</em>}, we adjust <em>θ</em> to maximize the
+                        combined likelihood of observing all data points in <em>D</em>. Essentially, it is a case of
+                        maximum likelihood estimation.
+                    </p>
+
+                    <p>
+                        When a model to learns the distribution from a dataset, it doesn’t just memorize the data
+                        points; it tries to understand the underlying process that generated them. We assume that every
+                        data point, like an image of a circle, is created by a set of hidden, low-dimensional factors.
+                        These factors are called <strong>latent variables</strong>.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*6FHRGv9dosU0etI67-d1Nw.png"
+                            alt="Latent variables as the hidden factors behind each data point">
+                    </figure>
+
+                    <p>
+                        Think of latent variables as a compact “code” or blueprint for each data sample. For a simple
+                        dataset of circles, the latent variables could be the circle’s x-y coordinates and its radius.
+                        The model learns to map these few variables to a high-dimensional image of a circle. This is
+                        far more efficient than storing every single pixel value of every circle in the dataset. This
+                        collection of latent variables for a dataset is called the latent space or latent
+                        representation. It’s a low-dimensional manifold where data points that are similar in the “real
+                        world” (e.g., circles with similar radii) are also close to each other in this latent space.
+                    </p>
+
+                    <p>
+                        The latent representation allows bi-directional mapping:
+                    </p>
+
+                    <ul>
+                        <li>Inference: Recovering latent variables from observed data (e.g., estimating
+                            [<em>x</em>,<em>y</em>,<em>r</em>] given a circle’s image). This process is known as
+                            encoding.</li>
+                        <li>Generation: Reconstructing data from latent variables (e.g., drawing a circle from
+                            [<em>x</em>,<em>y</em>,<em>r</em>]). This process is known as decoding.</li>
+                    </ul>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*M57C9z5Dpr8tbJUCoKsBdQ.png"
+                            alt="Inference and generation: encoding and decoding through the latent space">
+                    </figure>
+
+                    <p>
+                        We are trying to find a joint distribution <em>pθ</em>(<em>z</em>|<em>x</em>), using the chain
+                        rule of probability, this can be represented as the probability of <em>z</em> independent of
+                        <em>x</em> and the conditional probability of <em>x</em> given <em>z</em>. Given this
+                        factorization, the VAE is encouraged to map the full dat distribution <em>D</em> to a latent
+                        distribution <em>pθ</em>(<em>z</em>) then sampling from this will produce realistic synthetic
+                        examples in data space, all we have to do now is optimize <em>θ.</em>
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*I_SeOrbUhuzD1aQf54yGig.png"
+                            alt="Factorization of the joint distribution over data and latent variables">
+                    </figure>
+
+                    <p>
+                        To find the optimal parameters that define this joint distribution, we have to optimize
+                        <em>θ</em>, by maximizing <strong>marginal likelihood</strong> of the data,
+                        <em>pθ</em>(<em>x</em>). The expression for the marginal likelihood is an integral over all
+                        possible latent variables:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/386/1*C_klqVObo_6DkKThEEiKew.png"
+                            alt="The marginal likelihood as an integral over latent variables">
+                    </figure>
+
+                    <p>
+                        However, computing <em>pθ</em>(<em>x</em>) directly is intractable because it requires
+                        integrating over all possible <em>z</em> so we adapt Bayes’ rule.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*PLALdr1m7eMFbtseEz44GQ.png"
+                            alt="Bayes' rule applied to the posterior over latent variables">
+                    </figure>
+
+                    <p>
+                        The model evidence is the likelihood that our distribution parameter <em>θ</em> are approximate
+                        to the data <em>x</em> that we observe. We ideally want to maximize the model evidence, to do
+                        that, we need to find <em>θ</em> for which the right hand side is maximized.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/735/1*4x7hB7l8yM9bsXf9AKO4gQ.png"
+                            alt="The model evidence and the posterior">
+                    </figure>
+
+                    <p>
+                        Unfortunately, the fact that the marginal likelihood is intractable, the posterior is also
+                        intractable. But the fact that they are intractable means that knowing one, we know the other.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*ZWJp5d9Me6FQmgBi1QKCSA.png"
+                            alt="The intractable marginal likelihood and posterior">
+                    </figure>
+
+                    <p>
+                        We shift attention from calculating <em>pθ</em>(<em>x</em>) to approximating posterior
+                        probability <em>pθ</em>(<em>z|x</em>) and we do this by using variational inference.
+                    </p>
+
+                    <h2>Variational Inference</h2>
+                    <p>
+                        This implies approximating a target distribution to match a given distribution.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/786/1*cCGF27oy9hBaIReA02qBDA.png"
+                            alt="Approximating a target distribution with variational inference">
+                    </figure>
+
+                    <p>
+                        The KL divergence is an objective used to represent the expected information loss when we adopt
+                        <em>q</em> as our model while the true distribution is <em>p.</em>
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/424/1*VEER3M9ZBv8vqvrv7WctPg.png"
+                            alt="The KL divergence between the approximate and true distributions">
+                    </figure>
+
+                    <p>
+                        It represents the divergence of our approximate distribution <em>q</em> from the true
+                        distribution <em>p</em>. If <em>p = q,</em> then the KL divergence is 0 because both our
+                        approximate distribution and the true distribution are equal or exactly the same.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/500/1*LXE7SrzjWp5AaiY48iHUdw.png"
+                            alt="The KL divergence is zero when the distributions match">
+                    </figure>
+
+                    <p>
+                        Since the KL divergence is always non-negative, the KL divergence is expanded as such:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/671/1*fF1V75imwJ6d8gkVBM3tZw.png"
+                            alt="Expanding the KL divergence">
+                    </figure>
+
+                    <p>
+                        Now the likelihood <em>log pθ (x)</em> is the sum of the KL divergence and the ELBO since KL
+                        divergence is non-negative, we know that <em>log pθ (x) ≥ ELBO</em> value; making <em>ELBO</em>
+                        the lowest boundary of our approximation distribution. Essentially, the KL divergence is the gap
+                        between the <em>ELBO</em> and the log likelihood.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/596/1*_oo8jkCObJXH4VfpYus8WA.png"
+                            alt="The log likelihood as the KL divergence plus the ELBO">
+                    </figure>
+
+                    <p>
+                        Consequently, maximizing the <em>ELBO</em> maximizes <em>log pθ (x)</em> and minimizes the KL
+                        divergence. It minimizes the divergence from the true posterior <em>p</em> to the approximate
+                        distribution <em>q.</em> Simultaneously optimizing the generative and inference models. The
+                        <em>ELBO</em> is maximized using Stochastic gradient Descent.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/745/1*ta77DXdOWKuHfOaVe-ct0A.png"
+                            alt="Maximizing the ELBO maximizes the log likelihood">
+                    </figure>
+
+                    <p>
+                        The <em>ELBO</em> gradient w.r.t. <em>ϕ</em> is challenging because <em>ϕ</em> influences
+                        <em>qϕ</em>(<em>z</em>∣<em>x</em>), which defines the expectation. To move from the mean and
+                        standard deviation to a specific latent vector <em>z</em>, we need to sample from this
+                        distribution. However, this sampling process is stochastic and not differentiable, which makes
+                        it impossible to backpropagate gradients through it during training.
+                    </p>
+
+                    <p>
+                        To solve this, VAEs use the <strong>reparameterization trick</strong>. Instead of sampling
+                        directly from the distribution defined by <em>μ</em> and <em>σ</em>, we sample a value
+                        <em>ϵ</em> from a simple, fixed distribution (a standard Gaussian with a mean of 0 and a
+                        standard deviation of 1). We then calculate our latent vector <em>z</em> as a deterministic
+                        function of <em>ϕ</em> and a noise variable <em>ϵ</em>:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/569/1*v082-EWMChPRYWboGH1o-Q.png"
+                            alt="The reparameterization trick: z as a deterministic function of phi and epsilon">
+                    </figure>
+
+                    <p>
+                        where :
+                    </p>
+
+                    <ul>
+                        <li><em>μϕ(x)</em> and <em>σϕ(x)</em> are the mean and standard deviation outputs of the
+                            encoder network with parameters ϕ</li>
+                        <li><em>⊙</em> represents element-wise multiplication (Hadamard product)</li>
+                        <li><em>ϵ</em> is noise sampled from a standard normal distribution</li>
+                        <li><em>I</em> is the identity matrix</li>
+                    </ul>
+
+                    <p>
+                        This allows gradients to flow through <em>μϕ</em> and <em>σϕ</em>, enabling the entire model
+                        to be trained end-to-end using backpropagation.
+                    </p>
+
+                    <h2>VAE Architecture</h2>
+                    <p>
+                        The encoder maps input <em>x</em> to two outputs <em>μ</em> and <em>σ,</em> we then have
+                        stochastic variable <em>ϵ</em> sampled from fixed distribution <em>p(ϵ)</em> and used to
+                        sample latent variable <em>z</em>. The decoder, also a deterministic model, maps <em>z</em> to
+                        output <em>y</em>. Deep neural networks ensure maximum flexibility in deterministic models.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*IB05bi0WudF4gQbCEb2P8g.png"
+                            alt="The VAE architecture: encoder, sampling, and decoder">
+                    </figure>
+
+                    <p>
+                        The VAE is essentially an architecture with an inference/encoder model that reduces data
+                        <em>x</em> to latent representation <em>z</em> which is a low dimensional representation of the
+                        original data. Then the generative/decoder model attempts to reconstruct the original data
+                        <em>x</em> given the latent representation <em>z.</em> And the overall model is penalized
+                        according to the reconstruction error between the input and the reconstruction.
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/528/1*HbkLiw1QwBpbinXeqMY40Q.png"
+                            alt="The VAE objective: reconstruction error plus the prior penalty">
+                    </figure>
+
+                    <p>
+                        The model is also penalized for the difference between the distribution the encoder learned
+                        and a standard, well-behaved prior distribution. This forces the latent space to be continuous
+                        and well-structured, preventing the model from creating disconnected clusters.
+                    </p>
+
+                    <p>
+                        Thus, our model is an auto encoder, which learns to reconstruct inputs through low dimensional
+                        bottleneck that captures all important information in input. Instead of deterministically
+                        mapping <em>x</em> to <em>z</em> like an auto encoder, we sample <em>z</em> from a stochastic
+                        model on <em>x</em> that has been learned through variational inference, giving us a
+                        variational auto encoder.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Auto-Encoding Variational Bayes. <a href="https://arxiv.org/abs/1312.6114"
+                                target="_blank">arXiv:1312.6114</a>.</li>
+                        <li>Variational Autoencoders — Jeremy Jordan (jeremyjordan.me).</li>
+                        <li>The Reparametrization Trick (baeldung.com).</li>
+                        <li>Understanding variational Autoencoders (youtube.com).</li>
+                    </ul>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="latent-diffusion-language-generation.html">Latent Diffusion for Natural Language Generation: Efficient Text in Learned Spaces</a></li>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                    <li><a href="how-do-multimodal-models-combine-text-and-images.html">How do multimodal models actually combine text and images?</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

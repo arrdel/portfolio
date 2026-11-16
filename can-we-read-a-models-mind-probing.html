@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Can we read a model's mind? What probing actually tells us (and what it does not): presence is not use, and a probe is the start of an investigation, not the conclusion.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Can we read a model's mind? What probing actually tells us (and what it does not)">
+    <meta property="og:description"
+        content="A probe that predicts well shows information is present, not that the model uses it. What probing can and cannot tell us about a model's mind.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/can-we-read-a-models-mind-probing.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Can we read a model's mind? What probing actually tells us (and what it does not)">
+    <meta name="twitter:description"
+        content="A probe that predicts well shows information is present, not that the model uses it. What probing can and cannot tell us about a model's mind.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/can-we-read-a-models-mind-what-probing-actually-tells-us-and-what-it-does-not-8f8e2182ff14">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Can we read a model's mind? What probing actually tells us (and what it does not)</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Interpretability</span>
+                    <h1>Can we read a model's mind? What probing actually tells us (and what it does not)</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> October 29, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 10 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on October 29, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/can-we-read-a-models-mind-what-probing-actually-tells-us-and-what-it-does-not-8f8e2182ff14"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        When researchers say a model “knows” something, what do they mean? Usually they mean something
+                        more specific than the model getting the right answer. They mean that somewhere inside the
+                        model, in the numbers it passes from layer to layer, there is information about that thing, and
+                        that the model uses it. Probing is the main tool for checking that claim. It is also one of the
+                        most misunderstood tools in interpretability.
+                    </p>
+
+                    <p>
+                        A probe is a small classifier trained on a model’s hidden states. You feed the model many
+                        inputs, record the activations at some layer, and train the probe to predict a property from
+                        those activations. If the probe predicts well, you conclude the information is present in that
+                        layer. If it predicts poorly, you conclude it is absent. That sounds straightforward. It is
+                        not.
+                    </p>
+
+                    <h2>What a probe actually measures</h2>
+                    <p>
+                        Start with what the probe sees. A modern language model turns each input token into a vector,
+                        and each layer transforms those vectors. By the middle layers, a single vector can carry
+                        information about the word itself, the words around it, the sentence structure, and sometimes
+                        facts about the world. A probe asks whether a simple function can extract one specific property
+                        from that vector.
+                    </p>
+
+                    <p>
+                        The key word is simple. Probes are deliberately kept small, often just a linear classifier.
+                        The reasoning is that if the information can be read out with a simple function, then it is
+                        represented in a usable form, not just hidden somewhere in the numbers. If you allowed an
+                        arbitrarily powerful probe, it could learn the property itself from correlations, and you would
+                        learn nothing about the model.
+                    </p>
+
+                    <p>
+                        Even with that restriction, a positive probe result is a weak claim. It says the information is
+                        present and linearly readable at that layer. It does not say the model uses it. A model can
+                        carry information it ignores. Your blood test can reveal what you ate for lunch, but that does
+                        not mean your lunch caused your decisions that afternoon. Presence is not use.
+                    </p>
+
+                    <p>
+                        A negative probe result is even weaker than it looks. It says a linear probe could not read the
+                        property from that layer. It does not say the information is absent. It might be encoded
+                        nonlinearly, spread across several vectors, or present in a form the probe cannot reach.
+                        Failing to find something with one tool is not proof it is not there.
+                    </p>
+
+                    <h2>The three questions probing cannot answer alone</h2>
+                    <p>
+                        This is why careful interpretability work treats probing as the start of an investigation, not
+                        the conclusion. A probe result leaves three questions open, and each needs a different method.
+                    </p>
+
+                    <p>
+                        First, <em>is the information causally used?</em>
+                    </p>
+
+                    <p>
+                        To answer that, you have to intervene. Change the hidden state in the direction the probe
+                        identifies, or remove that information, and see whether the model’s output changes in the
+                        expected way. If editing the representation changes the answer, the information was doing work.
+                        If the answer stays the same, the probe found a passenger, not a driver. This distinction
+                        matters because models are full of passengers. Representations pick up correlations from
+                        training data that never influence the final output.
+                    </p>
+
+                    <p>
+                        Second, <em>is the probe reading the model or the data?</em>
+                    </p>
+
+                    <p>
+                        A probe trained on sentences about Paris will learn to predict “France” from activations that
+                        mention Paris, but the probe might be exploiting a shortcut in the dataset rather than a fact
+                        the model computed. Good probe design controls for this by testing on held-out patterns, using
+                        minimal pairs that differ only in the property of interest, and checking whether the probe still
+                        works when the surface cues are removed. A probe that only works on easy cases is a statement
+                        about the dataset, not the model.
+                    </p>
+
+                    <p>
+                        Third, <em>at what point does the information appear, and what happens to it later</em>?
+                    </p>
+
+                    <p>
+                        Probing layer by layer gives a profile: the property may be absent early, appear in the middle
+                        layers, and vanish again near the output. That profile is useful, but it is easy to overread.
+                        Information can be transformed rather than lost. A model might convert a syntactic property
+                        into a semantic decision, so the probe stops finding syntax not because the model forgot it, but
+                        because it no longer needs it in that form. Disappearance is not the same as irrelevance.
+                    </p>
+
+                    <h2>Why probes still matter, despite all this</h2>
+                    <p>
+                        Given these limits, why do researchers keep probing? Because probes are cheap, fast, and
+                        surprisingly diagnostic when used as part of a larger toolkit.
+                    </p>
+
+                    <p>
+                        Probes tell you where to look. If a property is linearly readable at layer 12 but not at layer
+                        4, an intervention study has a concrete place to start. Without the probe, you would be
+                        searching blind through dozens of layers and thousands of dimensions.
+                    </p>
+
+                    <p>
+                        Probes also give you a baseline for comparison. Train the same probe on a randomly initialized
+                        model, or on shuffled labels, and you get a control. If the trained model’s probe beats the
+                        control by a wide margin, something real happened during training. If it does not, the property
+                        may be an artifact of the architecture or the input itself, present before any learning took
+                        place. Controls turn a suggestive result into a meaningful one.
+                    </p>
+
+                    <p>
+                        And probes scale to questions that are hard to study any other way. You can probe hundreds of
+                        properties across every layer of a model in an afternoon, and use the pattern of results to
+                        form hypotheses. Those hypotheses then get tested with interventions, which are slower and more
+                        targeted. Probing is the survey; intervention is the experiment.
+                    </p>
+
+                    <h2>What a good probing study looks like</h2>
+                    <p>
+                        If you read a paper that uses probing, here is a short checklist for judging it.
+                    </p>
+
+                    <p>
+                        Does it use simple probes with controls? A linear probe compared against a random model and
+                        shuffled labels is the minimum. Without controls, a high accuracy number means very little.
+                    </p>
+
+                    <p>
+                        Does it go beyond presence to use? The strongest papers follow a probe result with an
+                        intervention: edit or erase the probed direction and report what happens to the output. A probe
+                        alone is a claim about representation. A probe plus an intervention is a claim about mechanism.
+                    </p>
+
+                    <p>
+                        Does it test generalization? A probe that only works on the training distribution may be
+                        memorizing dataset quirks. The convincing version works on new sentences, new entities, or new
+                        phrasings of the same property.
+                    </p>
+
+                    <p>
+                        Does it avoid claiming the model “understands”? Probing can show that information is present
+                        and used. It cannot show understanding in the human sense, because understanding is not a
+                        property you can read off a vector. Papers that keep their language precise, talking about
+                        representation and causal effect rather than beliefs and knowledge, are usually the ones to
+                        trust.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        Probing matters because it is how we move from <strong>treating models as black
+                        boxes</strong> to <strong>treating them as systems we can inspect</strong>. But the move only
+                        works if we are honest about what each method shows. A probe result is not a mind-reading
+                        result. It is evidence that information is encoded in a readable form at a particular place.
+                        That evidence becomes powerful when combined with interventions that show the information is
+                        used, and with evaluations that show the use changes outcomes in ways we care about.
+                    </p>
+
+                    <p>
+                        The broader lesson applies beyond probing. In interpretability, the most common mistake is not
+                        a technical one. It is a language one: upgrading a narrow measurement into a grand claim. A
+                        model does not “know” something just because a probe can predict it, just as a model does not
+                        “reason” just because it produces a plausible chain of thought. The work is in closing the gap
+                        between what we measured and what we claimed, one intervention at a time. That discipline is
+                        what will make model internals genuinely auditable, rather than merely impressive to describe.
+                    </p>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="same-accuracy-different-trajectory.html">Same accuracy, different trajectory: measuring reasoning in diffusion language models</a></li>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>

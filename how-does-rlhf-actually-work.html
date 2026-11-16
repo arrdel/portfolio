@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="How does RLHF actually work, and what does it change? Supervised fine-tuning, the reward model, PPO, DPO, and the debate over whether RLHF teaches anything new.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How does RLHF actually work, and what does it change?">
+    <meta property="og:description"
+        content="RLHF turns a raw next-token predictor into an assistant. A walk through SFT, the reward model, and PPO, and the question researchers still argue about.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/how-does-rlhf-actually-work.html">
+    <meta property="og:image" content="images/El.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How does RLHF actually work, and what does it change?">
+    <meta name="twitter:description"
+        content="RLHF turns a raw next-token predictor into an assistant. A walk through SFT, the reward model, and PPO, and the question researchers still argue about.">
+    <meta name="twitter:image" content="images/El.jpg">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/how-does-rlhf-actually-work-and-what-does-it-change-84a5d5b08e4c">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>How does RLHF actually work, and what does it change?</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Alignment</span>
+                    <h1>How does RLHF actually work, and what does it change?</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 10, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 12 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 10, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/how-does-rlhf-actually-work-and-what-does-it-change-84a5d5b08e4c"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Content -->
+                <!-- FIGURES (hotlinked from Medium CDN; at publish time, download to images/rlhf/ and update src):
+                     Bradley-Terry loss: https://cdn-images-1.medium.com/max/1024/1*rnEloY2OZvJ8uQkq8v47rQ.png
+                     PPO objective:      https://cdn-images-1.medium.com/max/1024/1*Qcd_ltkr5CS61BnJemcDPA.png
+                     DPO loss:           https://cdn-images-1.medium.com/max/1024/1*z7WR-PkRtxJUxH7paKRpRw.png -->
+                <div class="post-content">
+                    <p>
+                        GPT-3 was already an impressive model when it arrived in 2020. Given a prompt, it could write
+                        essays, translate languages, and answer questions. But if you asked it a question, it was as
+                        likely to continue with another question as to answer yours. ChatGPT, built on the same family
+                        of models, answered directly, admitted uncertainty, and refused when asked for something
+                        harmful. The difference between the two was not more pretraining data or a bigger model. It was
+                        a post-training recipe called RLHF, reinforcement learning from human feedback.
+                    </p>
+
+                    <p>
+                        RLHF is the process that turns a raw next-token predictor into an assistant. It is also one of
+                        the most misunderstood parts of modern language model training. This post walks through the
+                        mechanics, stage by stage, and then asks the question researchers still argue about: does RLHF
+                        actually teach a model anything new, or does it just dress up what pretraining already put
+                        there?
+                    </p>
+
+                    <h2>The problem: a model that completes, not a model that helps</h2>
+                    <p>
+                        Pretraining teaches a model one thing: predict the next token. Given a large corpus of internet
+                        text, the model learns to assign high probability to the continuations that look most like what
+                        a human would have written. That is a powerful skill, but it is not the same as being helpful.
+                    </p>
+
+                    <p>
+                        Ask a raw pretrained model “What is the capital of France?” and a plausible completion is “What
+                        is the capital of Germany?” The model is not answering. It is continuing a pattern, and a list
+                        of questions is a perfectly good pattern. Ask it to write a polite email, and it may write
+                        three more emails, or a critique of the first one. The model has no notion of your intent. It
+                        only knows what text usually comes next.
+                    </p>
+
+                    <p>
+                        Supervised fine-tuning, the first stage of RLHF, fixes the most visible part of this problem.
+                        But it cannot fix the deeper one, which is that “helpful” is a judgment, not a fact. There is
+                        no dataset of correct answers to train on, because for most prompts there is no single correct
+                        answer. There are only answers people prefer. RLHF is a way to train on preferences instead of
+                        on correct answers.
+                    </p>
+
+                    <h2>Stage 1: supervised fine-tuning</h2>
+                    <p>
+                        The first stage is the simplest. Human annotators write example prompts and the ideal
+                        responses to them, thousands of them, covering instructions, questions, coding tasks, and
+                        conversation. The pretrained model is then fine-tuned on these examples with ordinary
+                        supervised learning: given the prompt, predict the response token by token.
+                    </p>
+
+                    <p>
+                        After this stage, the model has learned the format of an assistant. It answers instead of
+                        continuing, it structures its output, and it follows the style of the demonstrations. This
+                        stage is doing a lot of heavy lifting, and it is worth remembering that. Many of the behaviors
+                        people attribute to RLHF, like polite formatting and structured answers, are already present
+                        after supervised fine-tuning.
+                    </p>
+
+                    <p>
+                        But supervised fine-tuning has a ceiling. It can only teach the model to imitate the
+                        demonstrations it was shown. It cannot teach the model which of two plausible answers is
+                        better, because the training signal is just “produce this exact text.” It also inherits every
+                        flaw in the demonstrations. If the annotators wrote verbose answers, the model learns to be
+                        verbose. RLHF exists to go beyond imitation.
+                    </p>
+
+                    <h2>Stage 2: the reward model</h2>
+                    <p>
+                        The second stage is where human preferences enter. The fine-tuned model is given a prompt and
+                        generates two or more different responses. Human annotators rank them, or simply pick the
+                        better one. Nobody writes a score. They just say: this answer is better than that one.
+                    </p>
+
+                    <p>
+                        Those pairwise comparisons become the training data for a second model, the reward model. It
+                        is usually a copy of the language model with its output head replaced by a single number, a
+                        score. It is trained so that its score for the preferred answer is higher than its score for
+                        the rejected one. The loss is the Bradley-Terry form, the standard way to turn pairwise
+                        comparisons into scores:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*rnEloY2OZvJ8uQkq8v47rQ.png"
+                            alt="Bradley-Terry loss for the reward model">
+                        <figcaption>The Bradley-Terry loss: the reward model learns to score the preferred response
+                            higher than the rejected one</figcaption>
+                    </figure>
+
+                    <p>
+                        Here r(x, y) is the reward model’s score for response y to prompt x, y_w is the preferred
+                        (winning) response, y_l is the rejected (losing) response, and sigma is the sigmoid function.
+                        The loss pushes the gap between the two scores up. It never says what a good answer is in
+                        absolute terms. It only learns the direction of preference.
+                    </p>
+
+                    <p>
+                        There is a reason preferences are collected as comparisons rather than as scores. Asking a
+                        person to rate an answer from 1 to 10 is noisy: one annotator’s 7 is another’s 5, and the same
+                        annotator drifts over a long session. Asking which of two answers is better is a much more
+                        reliable judgment, and it is easier to do consistently. The reward model is, in effect, a
+                        distillation of many small comparative judgments into a function that can score any answer
+                        instantly.
+                    </p>
+
+                    <p>
+                        Once trained, the reward model is a stand-in for the human raters. It can score millions of
+                        responses without anyone in the loop. That scalability is the whole point. Human feedback is
+                        expensive and slow, so RLHF uses humans to train a judge, and then lets the judge do the work
+                        at scale.
+                    </p>
+
+                    <p>
+                        The catch is that the judge is imperfect. It is a model trained on a finite set of
+                        comparisons, and it has blind spots. Anything that comes next inherits those blind spots, which
+                        is why the third stage needs a leash.
+                    </p>
+
+                    <h2>Stage 3: reinforcement learning with PPO</h2>
+                    <p>
+                        In the third stage, the language model itself becomes a reinforcement learning agent, called
+                        the policy. It is given a prompt, generates a response, and the reward model scores it. The
+                        policy’s weights are updated to produce higher-scoring responses, using an algorithm called
+                        Proximal Policy Optimization, or PPO.
+                    </p>
+
+                    <p>
+                        The objective the policy maximizes is the reward, minus a penalty for drifting too far from
+                        the model it started from:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*Qcd_ltkr5CS61BnJemcDPA.png"
+                            alt="PPO objective with KL penalty">
+                        <figcaption>The PPO objective: maximize reward, minus a KL penalty for drifting from the
+                            reference model</figcaption>
+                    </figure>
+
+                    <p>
+                        Here <em>pi</em> is the policy being trained, <em>pi_ref</em> is the frozen supervised
+                        fine-tuned model it started from, r is the reward model score, and beta controls the strength
+                        of the KL penalty. KL is the Kullback-Leibler divergence, a measure of how different two
+                        probability distributions are. The penalty is the leash: improve your score, but do not wander
+                        far from sensible language.
+                    </p>
+
+                    <p>
+                        The leash exists because of reward hacking. Left unchecked, reinforcement learning will find
+                        the easiest way to maximize the reward, and the easiest way is usually not what a human wants.
+                        A policy can learn to produce text that the reward model loves but that is gibberish to a
+                        person: repeated flattery, strange tokens, confident nonsense, or answers that are long because
+                        the reward model learned that longer answers tended to be preferred. The reward model is only a
+                        proxy for human judgment, and reinforcement learning is ruthlessly good at exploiting proxies.
+                        The KL penalty keeps the policy in the region where the reward model’s judgments are still
+                        reliable.
+                    </p>
+
+                    <p>
+                        PPO itself is worth a brief note, because it is the source of much of RLHF’s reputation for
+                        being hard to run. It is an on-policy algorithm, which means it must generate fresh responses
+                        from the current policy at every training step, score them, and then update. That requires
+                        holding the policy, the reference model, the reward model, and often a value model in memory at
+                        once, and the loop is famously sensitive to hyperparameters. This engineering cost is the main
+                        reason the field has been moving toward simpler alternatives.
+                    </p>
+
+                    <h2>The shortcut: DPO</h2>
+                    <p>
+                        In 2023, Rafailov and colleagues showed that the whole reward model and reinforcement learning
+                        apparatus could be skipped. Their method, Direct Preference Optimization, or DPO, starts from a
+                        mathematical observation: the KL-constrained reward maximization in stage 3 has a closed-form
+                        optimal policy, and that policy can be rewritten in terms of the reward. Working backward, the
+                        reward can be expressed in terms of the policy, which means the preference data can be used to
+                        train the policy directly, with no reward model and no RL loop:
+                    </p>
+
+                    <figure>
+                        <img src="https://cdn-images-1.medium.com/max/1024/1*z7WR-PkRtxJUxH7paKRpRw.png"
+                            alt="DPO loss">
+                        <figcaption>The DPO loss: preference data trains the policy directly, with no reward model and
+                            no RL loop</figcaption>
+                    </figure>
+
+                    <p>
+                        The loss increases the likelihood of the preferred response relative to the rejected one,
+                        measured against the reference model, with beta again controlling how far the policy is allowed
+                        to drift. It is a single supervised-style objective on the same preference pairs the reward
+                        model would have used.
+                    </p>
+
+                    <p>
+                        DPO is simpler, more stable, and far cheaper to run, and on many benchmarks it matches or
+                        beats PPO-based RLHF. It is now the default preference method in many open models. Meta’s
+                        Llama 3, for example, used DPO rather than PPO for its instruction-tuned versions. But the
+                        simplification comes with a tradeoff. DPO trains only on the fixed set of preference pairs,
+                        while PPO explores: it generates new responses, gets them scored, and can in principle discover
+                        answers that no human ever demonstrated. Whether that exploration matters in practice is an open
+                        question, and it is one reason the strongest labs still run RL in some form.
+                    </p>
+
+                    <h2>Two views of what RLHF actually does</h2>
+                    <p>
+                        Here is the debate. One view says RLHF, and alignment more broadly, is mostly superficial. The
+                        argument, made crisply in the LIMA paper by Zhou and colleagues, is that almost all of a
+                        model’s knowledge and capability comes from pretraining, and alignment training mostly teaches
+                        style and format: how to present an answer, when to refuse, how to structure a response. On
+                        this view, RLHF does not make the model smarter. It makes it behave like an assistant. The
+                        evidence is suggestive. LIMA showed that fine-tuning a strong base model on just 1,000
+                        carefully chosen examples produced responses competitive with models trained on far more
+                        alignment data. If alignment were teaching deep new skills, a thousand examples should not be
+                        enough.
+                    </p>
+
+                    <p>
+                        The other view says that misses what reinforcement learning can do. When the reward is not a
+                        learned model of human preference but a verifiable signal, like whether a piece of code passes
+                        its tests or a math answer is correct, RL can push a model to genuinely better reasoning. The
+                        most striking recent example is DeepSeek-R1, which used reinforcement learning with verifiable
+                        rewards to produce a model that reasons far better than its supervised-only counterpart,
+                        discovering behaviors like self-correction and extended chains of thought that were not in its
+                        training data. On this view, RL is not just a style layer. It is a way to elicit capabilities
+                        that pretraining put in the model but that imitation alone cannot surface.
+                    </p>
+
+                    <p>
+                        Both views have evidence, and the honest summary is that it depends on the reward. When the
+                        reward is a learned model of human taste, RLHF mostly reshapes behavior toward what people
+                        like, and it inherits the reward model’s blind spots, including a tendency to reward confident,
+                        fluent, slightly longer answers. When the reward is grounded in correctness, RL can genuinely
+                        improve reasoning. The interesting research question, and the one that matters most for the next
+                        generation of models, is how to get more of the second kind of reward: signals that are
+                        verifiable, hard to game, and aligned with what we actually want the model to do.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        RLHF matters because it is where a model’s behavior is decided. Pretraining determines what a
+                        model can do. Post-training determines what it will do. The same base model can become a
+                        helpful assistant, a terse coder, or a sycophant, depending on the preference data and the
+                        reward it was trained against. That makes the details of alignment, who writes the preferences,
+                        what the reward model learns, how strong the KL leash is, into design decisions with real
+                        consequences for millions of users.
+                    </p>
+
+                    <p>
+                        It also matters because the current recipe is unstable. PPO-based RLHF is expensive and
+                        finicky, DPO is simpler but does not explore, and reward hacking is a standing problem whenever
+                        the reward is a learned proxy. The field is actively searching for the next recipe: RL with
+                        verifiable rewards, methods that train on AI-generated feedback, and approaches that make the
+                        reward itself more reliable. If you are building or studying language models, the alignment
+                        stage is where the most consequential open questions live. The model learns language from the
+                        internet. It learns how to behave from us, and how well that works depends on how carefully we
+                        teach it.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Ouyang, L., et al. (2022). Training Language Models to Follow Instructions with Human
+                            Feedback. <a href="https://arxiv.org/abs/2203.02155" target="_blank">arXiv:2203.02155</a>.
+                            The InstructGPT paper that defined the three-stage RLHF pipeline.</li>
+                        <li>Schulman, J., et al. (2017). Proximal Policy Optimization Algorithms.
+                            <a href="https://arxiv.org/abs/1707.06347" target="_blank">arXiv:1707.06347</a>. PPO, the RL
+                            algorithm behind stage 3.</li>
+                        <li>Rafailov, R., et al. (2023). Direct Preference Optimization: Your Language Model is
+                            Secretly a Reward Model. <a href="https://arxiv.org/abs/2305.18290"
+                                target="_blank">arXiv:2305.18290</a>. DPO, the shortcut that skips the reward model and
+                            the RL loop.</li>
+                        <li>Zhou, C., et al. (2023). LIMA: Less Is More for Alignment.
+                            <a href="https://arxiv.org/abs/2305.11206" target="_blank">arXiv:2305.11206</a>. The case
+                            that alignment mostly teaches style and format.</li>
+                        <li>DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via
+                            Reinforcement Learning. <a href="https://arxiv.org/abs/2501.12948"
+                                target="_blank">arXiv:2501.12948</a>. RL with verifiable rewards improving
+                            reasoning.</li>
+                    </ul>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="why-language-models-hallucinate.html">Why language models hallucinate</a></li>
+                    <li><a href="same-accuracy-different-trajectory.html">Same accuracy, different trajectory: measuring reasoning in diffusion language models</a></li>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
