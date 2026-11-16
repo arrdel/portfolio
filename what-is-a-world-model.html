@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A world model predicts what happens next in the world. Video generators and latent predictors take two different routes to the same goal, and the real question is whether either of them actually understands physics.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="What is a world model, and why is everyone building one?">
+    <meta property="og:description"
+        content="A world model predicts what happens next in the world. Video generators and latent predictors take two different routes to the same goal, and the real question is whether either of them actually understands physics.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/what-is-a-world-model.html">
+    <meta property="og:image" content="https://arrdel.github.io/portfolio/images/world-models/thumbnail.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What is a world model, and why is everyone building one?">
+    <meta name="twitter:description"
+        content="A world model predicts what happens next in the world. Video generators and latent predictors take two different routes to the same goal, and the real question is whether either of them actually understands physics.">
+    <meta name="twitter:image" content="https://arrdel.github.io/portfolio/images/world-models/thumbnail.png">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/what-is-a-world-model-and-why-is-everyone-building-one-0bd5176e2bce">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>What is a world model, and why is everyone building one?</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Multimodality, Reasoning</span>
+                    <h1>What is a world model, and why is everyone building one?</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 16, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 13 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 16, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/what-is-a-world-model-and-why-is-everyone-building-one-0bd5176e2bce"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Featured Image -->
+                <!-- IMAGE: content-based thumbnail generated for this post (not the profile photo);
+                     file: images/world-models/thumbnail.png — upload via browser, the GitHub connector cannot push binaries -->
+                <figure class="post-featured-image">
+                    <img src="images/world-models/thumbnail.png"
+                        alt="A robot imagining the possible futures of a ball rolling across the floor">
+                    <figcaption>A world model imagines what happens next before acting</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        A language model predicts the next word. A world model predicts what happens next in the world. Give it a scene and an action, and it tells you, or shows you, what the scene looks like afterwards. That is the whole idea, and it is quietly becoming one of the most important ideas in machine learning.
+                    </p>
+
+                    <p>
+                        The phrase is everywhere right now. OpenAI described Sora as a step toward video generation models as world simulators. DeepMind built Genie, a model that turns a single image into a playable game world. Yann LeCun has argued for years that world models are the missing piece on the path to machines that can plan and reason. Autonomous driving teams use them to simulate traffic. Robotics labs use them to let a robot practice in its head before it moves in the real world.
+                    </p>
+
+                    <p>
+                        But the term is doing a lot of work. A world model can mean a video generator, a learned physics simulator, or a latent predictor that never produces a single pixel. This post sorts out what the term actually means, how the main approaches differ, and where the real debate is: do these models understand the world, or are they just very good at predicting what a video of the world looks like?
+                    </p>
+
+                    <h2>The idea in one paragraph</h2>
+                    <p>
+                        A world model is a learned model of an environment. It takes the current state of the world and an action, and it predicts the next state. In reinforcement learning, this is the classic definition from Ha and Schmidhuber (2018): the model is a simulator the agent can run inside its own head, so it can try out actions without paying the cost of trying them in reality.
+                    </p>
+
+                    <p>
+                        The word “world” is doing something specific here. The model is not a copy of reality. It is a compressed, predictive representation of the parts of reality that matter for acting. A chess program does not need to model the wood grain of the board. A driving model does not need to model the exact pattern of leaves on a tree. What it needs is the dynamics: if I steer left, the car moves left; if I push this block, it falls. A good world model captures the causal structure of its environment and ignores the rest.
+                    </p>
+
+                    <p>
+                        That compression is what makes world models useful, and it is also what makes them hard to build. The world is high-dimensional, partially observed, and full of irrelevant detail. Learning which parts to keep and which to throw away is the core problem.
+                    </p>
+
+                    <h2>Two families: video generators and latent predictors</h2>
+                    <p>
+                        There are two broad ways to build a world model, and they differ in what they predict.
+                    </p>
+
+                    <p>
+                        The first family predicts pixels. These are the video generation models: Sora, Runway Gen2, Veo, and DeepMind’s Genie and Genie 2. Given a starting image or a text prompt, plus a sequence of actions, they generate the future as video. Genie takes a single image and a set of controller inputs and produces a playable world, frame by frame, in real time. Genie 2 extends this to longer, richer environments with consistent object behavior. The strength of this approach is generality. These models train on internet-scale video, so they absorb an enormous amount of knowledge about how things look and move, from water pouring to crowds crossing streets. The weakness is that pixels are expensive and unforgiving. Generating every pixel of every frame costs far more compute than the underlying dynamics require, and small errors compound: a ball that drifts a few pixels off course in frame 10 is in the wrong place entirely by frame 100.
+                    </p>
+
+                    <p>
+                        The second family predicts in latent space. These models never reconstruct pixels. They encode the current observation into a compact representation, predict the representation of the future, and decode only when a human wants to look at the result. Dreamer, from Hafner and colleagues, is the canonical example in reinforcement learning: it learns a latent dynamics model, predicts rewards and future latent states, and trains its policy entirely inside imagined rollouts. MuZero, from DeepMind, goes further and learns a latent state that is optimized not to reconstruct the world but to predict the quantities planning needs: the reward, the value, and the best action. It does not know what the board looks like. It knows what the board means for winning.
+                    </p>
+
+                    <p>
+                        Latent models are cheaper to run and more stable over long horizons, because they predict at the level of the dynamics rather than the level of the pixels. Their weakness is the opposite one: if you never reconstruct the observation, it is harder to check what the model actually learned, and easier for it to learn a representation that is convenient for prediction but disconnected from the world.
+                    </p>
+
+                    <h2>Why predict in latent space? LeCun’s argument</h2>
+                    <p>
+                        The most influential case for latent prediction comes from Yann LeCun’s 2022 position paper, “A Path Towards Autonomous Machine Intelligence.” His argument is about wasted capacity. Predicting pixels means predicting everything, including details that are irrelevant and, worse, unpredictable in principle. No model can predict the exact position of every leaf on a tree in the wind. A model trained to do so will either waste its capacity on noise or learn to blur its predictions into an average that satisfies no one.
+                    </p>
+
+                    <p>
+                        LeCun’s proposed architecture, JEPA (Joint Embedding Predictive Architecture), avoids this by predicting representations instead of pixels. It has two encoders and a predictor. One encoder turns the present observation into a representation. A second, slowly updated target encoder turns the future observation into its representation. The predictor takes the present representation, plus some information about the action or the missing part of the scene, and tries to predict the future representation. There is no decoder and no pixel reconstruction anywhere in the loop.
+                    </p>
+
+                    <p>
+                        The catch is collapse. If the model is free to choose its representations, the easiest way to make prediction perfect is to make every representation the same constant vector. Then the predictor is always right, and the model has learned nothing. JEPA architectures avoid collapse with a combination of tricks: the target encoder is an exponential moving average of the main encoder (so it changes slowly), and the representations are regularized to keep their variance high and their dimensions decorrelated, a technique from the VICReg method. The I-JEPA model (Assran et al., 2023) showed this works for images, and V-JEPA (Bardes et al., 2024) extended it to video, learning representations that predict how a scene evolves over time. V-JEPA 2 (2025) scaled the idea up and showed the resulting representations transfer well to action recognition and even to robot planning.
+                    </p>
+
+                    <p>
+                        The underlying claim is philosophical as much as technical. A world model should model the world at the level of abstraction where prediction is possible and useful. Pixels are too low. Symbols, like words in a language model, are too high: they throw away the continuous structure of physical space. Representations learned by prediction itself sit in between, and LeCun argues that is where the action is.
+                    </p>
+
+                    <h2>What world models are actually used for</h2>
+                    <p>
+                        The most established use is planning in reinforcement learning. DreamerV3 (Hafner et al., 2023) mastered a wide range of tasks, from Atari games to continuous control, by learning a world model and training its policy on imagined trajectories. Because the policy trains in imagination, it needs far fewer real environment interactions, which matters enormously when real interactions are expensive, slow, or dangerous. MuZero used the same logic to master chess, Go, shogi, and Atari without ever being told the rules of the games. It learned its own latent model of each game and planned inside it.
+                    </p>
+
+                    <p>
+                        Robotics is the second use, and the one with the highest stakes. A robot that can imagine the consequences of its actions can plan a grasp, avoid a collision, or recover from a mistake before it happens. The catch is the gap between the imagined world and the real one: a plan that works in the model fails if the model is wrong about friction, mass, or contact. This is why robotics researchers care so much about model accuracy, and why a world model that is approximately right about video is not necessarily right about the physics a robot needs.
+                    </p>
+
+                    <p>
+                        The third use is generation itself. Interactive world models like Genie are not just simulators; they are creative tools. A designer can sketch a scene and then play inside it. Game studios and film teams are watching this space closely, because a model that can generate a consistent, controllable world is a new medium, not just a new algorithm.
+                    </p>
+
+                    <p>
+                        And the fourth use is the one closest to this line of research: evaluation. If a model claims to understand the world, a world model gives you a way to test the claim. You can ask counterfactual questions (what would happen if the ball were dropped instead of thrown?), intervene on the model’s internal state, and see whether its predictions change the way a real causal model would. A world model turns “does it understand?” from a philosophical question into an experimental one.
+                    </p>
+
+                    <h2>The debate: do they understand physics, or just pattern-match video?</h2>
+                    <p>
+                        Here is where the two families meet their critics.
+                    </p>
+
+                    <p>
+                        The skeptical case is straightforward. Video models are trained to predict what a video looks like, not what the world is. A model can generate a convincing video of a ball bouncing without having any internal notion of gravity, momentum, or elasticity. It just needs to know what bouncing looks like. And the failures are telling. Generated videos still show objects appearing out of nowhere, liquids that flow uphill, hands with the wrong number of fingers, and balls that pass through walls. These are exactly the failures you would expect from a model that has learned the statistics of video rather than the laws of physics.
+                    </p>
+
+                    <p>
+                        The evidence backs the skeptics up, at least in part. The Physics-IQ benchmark (Motamed et al., 2025) tests video models on intuitive physics scenarios: collisions, gravity, fluid behavior, object permanence. The result is that even the best models score far below human performance, and their errors are not subtle. They are the errors of a system that has memorized appearances. Earlier benchmarks like IntPhys and CLEVRER, which test physical reasoning in controlled synthetic scenes, tell a similar story: models can be fluent and wrong at the same time.
+                    </p>
+
+                    <p>
+                        The optimistic case is that this is a matter of degree, not kind. Human understanding of physics is also learned from observation, and it is also approximate. The fact that a model makes mistakes does not mean it has no model of the world; it means its model is imperfect. And the models are improving fast. Genie 2 maintains object identity and spatial layout over long horizons in ways that earlier video models could not. World models trained with action conditioning show genuine controllability: press left, and the character moves left, consistently, over hundreds of frames. That is not nothing. It is a learned dynamics model, even if it is a crude one.
+                    </p>
+
+                    <p>
+                        There is also a deeper point the optimists make. The distinction between “understanding physics” and “predicting video well” may not be as sharp as it sounds. A model that could predict video perfectly, at every level of detail, over arbitrarily long horizons, would have to encode the laws of physics, because the laws of physics are what determine the video. The question is whether current models are on the path to that limit, or whether they are stuck in a regime where fluent short-horizon prediction never turns into real understanding. Nobody knows yet, and that is why this is an active research question rather than a settled one.
+                    </p>
+
+                    <h2>The evaluation problem</h2>
+                    <p>
+                        Underneath the debate is a measurement problem. How do you test whether a world model understands the world?
+                    </p>
+
+                    <p>
+                        Generation quality is not enough. A video can look realistic and be physically wrong, and human raters are easily fooled by fluency. The benchmarks that exist, like Physics-IQ, IntPhys, and CLEVRER, are a start, but they are limited. They test specific scenarios, and a model can be tuned to pass them without generalizing.
+                    </p>
+
+                    <p>
+                        The more principled approach is counterfactual and interventional testing, the same logic that drives mechanistic interpretability research. Change one thing in the scene and see whether the model’s prediction changes in the right way. Remove an object and see whether the model notices. Ask the model to predict the outcome of an action it has never seen. These are the tests that distinguish a model that has learned causal structure from one that has learned correlations. They are also hard to run at scale, because they require controlled environments and careful experimental design.
+                    </p>
+
+                    <p>
+                        This is where the field is heading. The next generation of world model papers will be judged less on how beautiful their generated videos are and more on whether their models survive intervention. Can you change the model’s internal representation of an object’s position and get the right change in its prediction? Can it generalize to a new combination of objects and forces? Those are the questions that separate a video generator from a world model in the strong sense.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        World models matter because they are the bridge between perception and action. A language model can describe the world. A world model can predict it, and prediction is what planning requires. Every agent that needs to act in the world, a robot, a self-driving car, a game character, a scientific simulator, needs some version of this capability. Pure reactive systems, models that map inputs directly to outputs without an internal model of what comes next, hit a ceiling. They cannot plan, they cannot simulate consequences, and they cannot answer “what if” questions.
+                    </p>
+
+                    <p>
+                        They also matter because they are where the biggest open questions in the field now live. How much of the world can you learn from video alone? Does prediction in latent space scale the way language modeling did? Can a world model be combined with a language model to get a system that both reasons in words and simulates in the world? These are the questions that labs are hiring for, and they are the questions that will decide whether the next leap in AI comes from bigger language models or from models that understand the world they are talking about.
+                    </p>
+
+                    <p>
+                        For researchers, the practical takeaway is this. Do not be impressed by a beautiful generated video. Ask what the model predicts when you intervene, what happens over a long horizon, and whether its errors look like the errors of a system that knows physics or the errors of a system that knows what physics looks like. The difference between those two things is the difference between a video generator and a world model, and it is the most important distinction in this part of the field right now.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Ha, D. and Schmidhuber, J. (2018). World Models. <a href="https://arxiv.org/abs/1803.10122" target="_blank">arXiv:1803.10122</a>.</li>
+                        <li><a href="https://www.alphaxiv.org/abs/2603.a-path-towards-autonomous-machine-intelligence" target="_blank">LeCun, Y. (2022). A Path Towards Autonomous Machine Intelligence.</a></li>
+                        <li>Hafner, D., et al. (2023). Mastering Diverse Domains through World Models. <a href="https://arxiv.org/abs/2301.04104" target="_blank">arXiv:2301.04104</a>.</li>
+                        <li><a href="https://arxiv.org/abs/1911.08265" target="_blank">Schrittwieser, J., et al. (2020). Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model.</a></li>
+                        <li><a href="https://arxiv.org/abs/2301.08243" target="_blank">Assran, M., et al. (2023). Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture.</a></li>
+                        <li><a href="https://arxiv.org/abs/2404.08471" target="_blank">Bardes, A., et al. (2024). Revisiting Feature Prediction for Learning Visual Representations from Video.</a></li>
+                        <li><a href="https://openai.com/index/video-generation-models-as-world-simulators/" target="_blank">OpenAI (2024). Video Generation Models as World Simulators. The Sora technical report.</a></li>
+                    </ul>
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                    <li><a href="how-do-multimodal-models-combine-text-and-images.html">How do multimodal models actually combine text and images?</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
