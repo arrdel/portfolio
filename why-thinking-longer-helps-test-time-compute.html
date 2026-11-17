@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Test-time compute adds a second scaling axis: instead of training a bigger model, let the model think longer. Sampling, verifier-guided search, and iterative revision, and where each stops working.">
+    <meta name="author" content="Adele Chinda">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Why thinking longer helps: test-time compute and the new scaling axis">
+    <meta property="og:description"
+        content="Test-time compute adds a second scaling axis: instead of training a bigger model, let the model think longer. Sampling, verifier-guided search, and iterative revision, and where each stops working.">
+    <meta property="og:url" content="https://arrdel.github.io/portfolio/why-thinking-longer-helps-test-time-compute.html">
+    <meta property="og:image" content="https://arrdel.github.io/portfolio/images/test-time-compute/thumbnail.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Why thinking longer helps: test-time compute and the new scaling axis">
+    <meta name="twitter:description"
+        content="Test-time compute adds a second scaling axis: instead of training a bigger model, let the model think longer. Sampling, verifier-guided search, and iterative revision, and where each stops working.">
+    <meta name="twitter:image" content="https://arrdel.github.io/portfolio/images/test-time-compute/thumbnail.png">
+
+    <!-- Canonical: the Medium original -->
+    <link rel="canonical" href="https://medium.com/@chindahel1/why-thinking-longer-helps-test-time-compute-and-the-new-scaling-axis-8971c85fb0a9">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="apple-touch-icon" href="images/logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <title>Why thinking longer helps: test-time compute and the new scaling axis</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="profile">
+                <img src="images/El.jpg" alt="Adele Chinda" class="profile-img">
+                <h1>Adele Chinda</h1>
+                <p class="contact">
+                    <a href="mailto:chindahel1@gmail.com">chindahel1@gmail.com</a><br>
+                    PhD Student<br>
+                    ML Research<br>
+                    Atlanta, Georgia
+                </p>
+                <div class="social-links">
+                    <a href="https://drive.google.com/file/d/1CGYINzGXRJIUxtWzq9gkBMpRgqJ4EECD/view?usp=sharing"
+                        target="_blank" rel="noopener noreferrer" title="CV">CV</a>
+                    <a href="https://www.linkedin.com/in/adele-chinda/" target="_blank" rel="noopener noreferrer"
+                        title="LinkedIn">
+                        <i class="fa-brands fa-linkedin"></i>
+                    </a>
+                    <a href="https://scholar.google.com/citations?user=T6qXvdAAAAAJ&hl=en" target="_blank"
+                        rel="noopener noreferrer" title="Google Scholar">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </a>
+                    <a href="https://www.researchgate.net/profile/Adele-Chinda-2?ev=hdr_xprf" target="_blank"
+                        rel="noopener noreferrer" title="ResearchGate">
+                        <i class="fa-brands fa-researchgate"></i>
+                    </a>
+                    <a href="https://github.com/arrdel" target="_blank" rel="noopener noreferrer" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="https://medium.com/@chindahel1" target="_blank" rel="noopener noreferrer" title="Medium">
+                        <i class="fa-brands fa-medium"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- BLOG POST -->
+            <article class="blog-post">
+                <!-- Post Header -->
+                <header class="post-header">
+                    <span class="post-category">Reasoning, Scaling</span>
+                    <h1>Why thinking longer helps: test-time compute and the new scaling axis</h1>
+                    <div class="post-meta">
+                        <span class="post-date"><i class="fas fa-calendar"></i> November 17, 2026</span>
+                        <span class="post-author"><i class="fas fa-user"></i> Adele Chinda</span>
+                        <span class="post-reading-time"><i class="fas fa-clock"></i> 11 min read</span>
+                    </div>
+                </header>
+
+                <p
+                    style="margin-top: 10px; padding: 16px 20px; background-color: var(--background-alt); border-radius: 6px; border-left: 4px solid var(--link-color);">
+                    <strong>Originally published on Medium on November 17, 2026.</strong> Read the original at
+                    <a href="https://medium.com/@chindahel1/why-thinking-longer-helps-test-time-compute-and-the-new-scaling-axis-8971c85fb0a9"
+                        target="_blank">medium.com/@chindahel1</a>.
+                </p>
+
+                <!-- Post Featured Image -->
+                <!-- IMAGE: content-based thumbnail generated for this post (not the profile photo);
+                     file: images/test-time-compute/thumbnail.png, upload via browser, the GitHub connector cannot push binaries -->
+                <figure class="post-featured-image">
+                    <img src="images/test-time-compute/thumbnail.png"
+                        alt="A branching search tree of reasoning paths, one path glowing brightest">
+                    <figcaption>Thinking longer means searching more branches before committing to an answer</figcaption>
+                </figure>
+
+                <!-- Post Content -->
+                <div class="post-content">
+                    <p>
+                        In September 2024, OpenAI released a model that did something strange. Asked a hard question, it paused. It produced a long, hidden chain of thought, reconsidered its own steps, and only then answered. On competition math and coding problems it was dramatically better than the models before it, and the improvement did not come from a bigger model or more training data. It came from spending more computation at the moment of answering.
+                    </p>
+
+                    <p>
+                        That release marked a shift in how the field thinks about scaling. For years, the recipe for a better model was fixed: train a bigger model on more data. Test-time compute adds a second axis. Instead of training harder, you let the model think longer. This post explains what that means mechanically, why it works, where it stops working, and why it changes the economics of building with language models.
+                    </p>
+
+                    <h2>What test-time compute actually is</h2>
+                    <p>
+                        Test-time compute is any computation spent per query, after training is finished. Training compute is spent once, up front, to produce the weights. Test-time compute is spent every time the model answers a question, and you decide how much to spend on each question.
+                    </p>
+
+                    <p>
+                        There are three main ways to spend it.
+                    </p>
+
+                    <p>
+                        The first is to sample many answers and pick the best one. Instead of generating a single response, the model generates ten, or a hundred, and you keep the answer that shows up most often. This is called self-consistency, and it works for a simple reason: on many problems, the model gets the right answer some of the time but not every time. If it is right 30 percent of the time on a single try, and the right answer is the most common one across many tries, then voting across samples turns a sometimes into a usually. The technique was introduced by Wang and colleagues in 2022, and it remains the simplest way to buy accuracy with compute.
+                    </p>
+
+                    <p>
+                        The second way is to search. Instead of sampling complete answers independently, the model explores a tree of partial solutions, and a second model, called a verifier, scores each step and prunes the bad branches. This is the same idea as a chess engine searching through moves, except the moves are sentences and the evaluation function is learned. The verifier can be an outcome reward model, which scores only the final answer, or a process reward model, which scores each intermediate step. Process reward models are more expensive to train, because they need labels for steps rather than just for final answers, but they catch errors earlier, before a wrong step poisons the rest of the solution.
+                    </p>
+
+                    <p>
+                        The third way is to revise. The model writes an answer, critiques it, and rewrites it, repeating the loop until the answer stops improving. This is sequential rather than parallel: one long chain of reasoning instead of many short ones. OpenAI's o1 and DeepSeek-R1 both use long chains of thought produced this way, trained with reinforcement learning that rewards correct final answers and lets the model discover behaviors like backtracking and self-correction on its own.
+                    </p>
+
+                    <p>
+                        If you work on diffusion models, the third mechanism should feel familiar. A diffusion model also improves its output iteratively, starting from noise and refining step by step. The difference is the medium. A diffusion model refines a continuous representation across denoising steps, while an autoregressive model refines text across tokens. In both cases, the core idea is the same: the first attempt is a draft, and extra computation is spent turning the draft into something better.
+                    </p>
+
+                    <h2>Why sampling works at all</h2>
+                    <p>
+                        There is a puzzle here. If the model already knows the answer, why does it not just give it the first time? And if it does not know the answer, how does generating more text help?
+                    </p>
+
+                    <p>
+                        The answer is that a language model is a distribution over continuations, not a single answer. When you ask it a question, it assigns probabilities to many possible responses. Greedy decoding, the default, picks the most likely token at each step and produces the single most likely response. But the most likely response is not always the correct one. Sampling from the distribution instead produces a variety of responses, and on reasoning problems, the correct answer often appears among them even when it is not the top choice.
+                    </p>
+
+                    <p>
+                        This is easiest to see with a concrete measure. Researchers distinguish pass@1, the chance the first sample is correct, from pass@k, the chance that at least one of k samples is correct. On hard math problems, pass@k can be far higher than pass@1. The gap between them is the headroom that test-time compute exploits. The knowledge is in the model; the problem is reaching it reliably. Sampling, voting, and search are different ways of reaching it.
+                    </p>
+
+                    <p>
+                        But reaching it requires a way to tell the right answer from the wrong ones, and that is where the verifier comes in. For math and code, verification can be exact: run the code, check the final number. For open-ended questions, verification is itself a learned judgment, which brings us to the central weakness of the whole approach.
+                    </p>
+
+                    <h2>The verifier is the bottleneck</h2>
+                    <p>
+                        Every test-time method that goes beyond simple majority voting depends on a verifier, and the verifier is only as good as its training. This is the same problem RLHF has with its reward model, and the failure modes are similar. A verifier can be gamed. A model searching against a learned verifier will find outputs that score highly without being correct, because the search is optimizing the verifier's score, not correctness itself. The longer you search, the more the verifier's blind spots matter.
+                    </p>
+
+                    <p>
+                        There is also a deeper asymmetry. Verification is supposed to be easier than generation: checking a proof is easier than finding one. That is true for math and code, where an answer can be checked mechanically. It is much less clear for writing, planning, or open-ended reasoning, where there is no ground truth to check against. On those tasks, the verifier is just another model making a judgment, and using one model's judgment to select another model's output can amplify shared biases rather than correct them.
+                    </p>
+
+                    <p>
+                        This is why the gains from test-time compute are uneven. On tasks with verifiable answers, thinking longer reliably helps. On tasks where correctness is a matter of taste or judgment, the gains are smaller and harder to trust.
+                    </p>
+
+                    <h2>How much does it actually buy?</h2>
+                    <p>
+                        The most systematic answer comes from Snell and colleagues at UC Berkeley and Google DeepMind, who studied test-time compute scaling in 2024. Their setup was deliberately careful: they compared different ways of spending a fixed inference budget, measured in floating point operations, against simply training a bigger model with the same total compute.
+                    </p>
+
+                    <p>
+                        Three findings matter.
+                    </p>
+
+                    <p>
+                        First, how you spend the budget matters more than how much you spend. A strategy that allocates compute adaptively, choosing the method and the budget per question based on an estimate of that question's difficulty, was more than four times as efficient as naive best-of-N sampling. Easy questions got sequential revision, which worked best there. Harder questions got beam search against a process reward model, which worked best there. Spending the same budget on every question, easy or hard, wastes most of it.
+                    </p>
+
+                    <p>
+                        Second, on easy and medium questions, a smaller model given extra test-time compute could outperform a model fourteen times larger. The small model already had a non-trivial chance of solving those questions, and extra compute was enough to close the gap. This is the result that made the field pay attention, because it suggests that inference compute can substitute for model size, at least sometimes.
+                    </p>
+
+                    <p>
+                        Third, and just as important, the substitution has limits. On the hardest questions, where the small model's success rate was close to zero, extra test-time compute added almost nothing, and more pretraining was the better investment. The authors' conclusion was that the two kinds of compute are not one-to-one exchangeable. Test-time compute amplifies capability that is already in the model. It does not create capability that is not there.
+                    </p>
+
+                    <p>
+                        That distinction matters for how you read the recent wave of reasoning models. When a model trained with reinforcement learning on verifiable rewards produces a long chain of thought and solves problems it previously could not, part of what happened is test-time compute, and part of it is training: the RL phase taught the model how to use its thinking time well. The two are complements, not substitutes.
+                    </p>
+
+                    <h2>The other side: what thinking longer costs</h2>
+                    <p>
+                        Test-time compute is not free, and its costs are different in kind from training costs.
+                    </p>
+
+                    <p>
+                        The first cost is latency. A model that thinks for two minutes before answering is unusable for interactive chat, no matter how good the answer is. The second cost is price. Inference compute is paid per query, so a method that uses a hundred samples costs roughly a hundred times as much per answer. A lab can afford to train a big model once; serving it a million times a day at a hundred times the cost is a different budget. Snell and colleagues made this precise: when a model will serve enormous volumes of queries relative to its training, extra pretraining pays for itself, and test-time compute stops being the cheaper option.
+                    </p>
+
+                    <p>
+                        The third cost is subtler. Longer chains of thought can drift. A model that reasons for hundreds of tokens has hundreds of chances to make a wrong turn, and once it commits to a wrong approach, extra thinking can entrench the error rather than correct it. Researchers have documented cases where longer reasoning produces confident, elaborate, wrong answers, and where a model talks itself out of a correct first instinct. Thinking longer helps when the model can check its own work. When it cannot, thinking longer is just more opportunity to be wrong with confidence.
+                    </p>
+
+                    <p>
+                        There is also an open question about what is really being scaled. Is a long chain of thought genuine reasoning, or is it a more thorough search over patterns the model memorized during training? This is the same question I raised about diffusion models in an earlier post, and it has no settled answer here either. The honest position is that test-time compute demonstrably improves accuracy on verifiable tasks, and that whether the underlying process deserves the name reasoning depends on what you mean by the word. The behavior is real either way.
+                    </p>
+
+                    <h2>Why this matters</h2>
+                    <p>
+                        Test-time compute matters because it changes who can compete. If a smaller model plus thinking time can match a much larger model, then the advantage of whoever can afford the biggest training run shrinks, and the advantage shifts to whoever builds the best verifiers, the best search strategies, and the best ways of deciding how much to think about each question. That is a different kind of engineering, and it is more accessible to smaller labs and to academic researchers.
+                    </p>
+
+                    <p>
+                        It also changes the research agenda. The interesting problems are now about verification: how to build verifiers that are hard to game, how to get process-level supervision without expensive human labels, and how to know when to stop thinking. They are also about adaptivity: spending a lot of compute on the questions that need it and almost none on the ones that do not. And for those of us working on diffusion models, there is a natural connection. Diffusion models are already test-time computers: their entire generation process is iterative refinement, and the number of denoising steps is a test-time budget you can turn up or down. The question of how to spend that budget well, and how to verify intermediate states, is the same question the language modeling world is now asking about chains of thought.
+                    </p>
+
+                    <p>
+                        The first decade of scaling was about training: bigger models, more data. The next one will be about both axes, and about the judgment to use each where it helps. Thinking longer is a powerful lever. Like every lever, it works best when you know what it can and cannot move.
+                    </p>
+
+                    <h2>References</h2>
+                    <ul>
+                        <li>Snell, C., Lee, J., Xu, K., and Kumar, A. (2024). Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters. <a href="https://arxiv.org/abs/2408.03314" target="_blank">arXiv:2408.03314</a>. The systematic study of how to spend a fixed inference budget, the compute-optimal strategy, and the comparison with a 14x larger model.</li>
+                        <li>Wang, X., et al. (2022). Self-Consistency Improves Chain of Thought Reasoning in Language Models. <a href="https://arxiv.org/abs/2203.11171" target="_blank">arXiv:2203.11171</a>. Sample many reasoning paths and take the majority answer.</li>
+                        <li>OpenAI (2024). Learning to Reason with LLMs (o1). The release that made long chains of thought and test-time compute a product.</li>
+                        <li>DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning. <a href="https://arxiv.org/abs/2501.12948" target="_blank">arXiv:2501.12948</a>. Reinforcement learning with verifiable rewards producing self-correction and extended reasoning.</li>
+                        <li>Lightman, H., et al. (2023). Let's Verify Step by Step. <a href="https://arxiv.org/abs/2305.20050" target="_blank">arXiv:2305.20050</a>. Process reward models and step-level verification.</li>
+                    </ul>
+
+
+                    <!-- Back to Blog Link -->
+                    <div class="post-footer">
+                        <a href="blog.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related Posts -->
+            <aside class="related-posts">
+                <h3>Related Articles</h3>
+                <ul>
+                    <li><a href="thinking-without-words.html">Thinking without words: verbal chain-of-thought vs latent and trajectory-based reasoning</a></li>
+                    <li><a href="do-diffusion-models-actually-reason-or-just-denoise.html">Do diffusion models actually reason, or just denoise?</a></li>
+                    <li><a href="how-does-rlhf-actually-work.html">How does RLHF actually work, and what does it change?</a></li>
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-copyright">&copy; 2026 Adele Chinda. All rights reserved.</p>
+            <p class="footer-credit">
+                Built with <span class="heart">❤</span> using the <a
+                    href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                    Project Page Template</a> adapted from <a href="https://nerfies.github.io"
+                    target="_blank">Nerfies</a>
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
