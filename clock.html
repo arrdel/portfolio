@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Desk Clock">
+<title>Desk Clock</title>
+<style>
+  * { margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #fff;
+    -webkit-text-size-adjust: 100%;
+  }
+  #clock { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  /* Centered time + date block */
+  #center {
+    position: absolute; top: 50%; left: 0; width: 100%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    text-align: center;
+  }
+  #time { white-space: nowrap; }
+  .card {
+    display: inline-block;
+    position: relative;
+    width: 19vw;
+    height: 36vw;
+    line-height: 36vw;
+    font-size: 30vw;
+    font-weight: 300;
+    text-align: center;
+    vertical-align: top;
+    margin: 0 0.6vw;
+    color: #fff;
+    background: #1a1a1a;
+    background: -webkit-linear-gradient(top, #2b2b2b 0%, #0d0d0d 48%, #000000 52%, #202020 100%);
+    background: linear-gradient(to bottom, #2b2b2b 0%, #0d0d0d 48%, #000000 52%, #202020 100%);
+    border: 1px solid #2c2c2c;
+    border-radius: 1.5vw;
+    box-shadow: 0 1vw 3vw rgba(0,0,0,0.9);
+    overflow: hidden;
+  }
+  .card .split {
+    position: absolute; left: 0; top: 50%;
+    width: 100%; height: 2px; margin-top: -1px;
+    background: #000;
+  }
+  .colon {
+    display: inline-block;
+    width: 5vw;
+    font-size: 30vw;
+    line-height: 36vw;
+    vertical-align: top;
+    text-align: center;
+    color: #fff;
+  }
+  #ampm {
+    display: inline-block;
+    font-size: 6vw;
+    line-height: 1;
+    vertical-align: top;
+    margin-top: 3vw;
+    margin-left: 1vw;
+    color: #999;
+  }
+  #date {
+    margin-top: 3.5vw;
+    font-size: 4.2vw;
+    letter-spacing: 0.06em;
+    color: #bbb;
+  }
+
+  /* Live seconds, bottom-right */
+  #seconds {
+    position: absolute; right: 4vw; bottom: 2.5vw;
+    font-size: 6vw;
+    color: #999;
+  }
+
+  /* Hint shown briefly on load */
+  #hint {
+    position: absolute; top: 14px; left: 0; width: 100%;
+    text-align: center; font-size: 14px; color: #666;
+  }
+
+  /* Lock button, visible only while locked */
+  #lockBtn {
+    display: none;
+    position: absolute; top: 10px; right: 12px;
+    font-size: 22px; opacity: 0.55;
+    background: none; border: none; color: #fff; padding: 6px;
+  }
+
+  /* Controls bar */
+  #controls {
+    display: none;
+    position: absolute; left: 0; bottom: 0; width: 100%;
+    background: rgba(22,22,22,0.95);
+    border-top: 1px solid #333;
+    padding: 12px 0 14px 0;
+    text-align: center;
+    font-size: 15px;
+  }
+  #controls .row { margin: 7px 0; }
+  #controls .label { color: #999; margin-right: 6px; }
+  #controls button {
+    background: #2a2a2a; color: #fff;
+    border: 1px solid #555; border-radius: 6px;
+    padding: 7px 12px; margin: 0 3px; font-size: 15px;
+  }
+  #controls button.on { background: #006699; border-color: #0099cc; }
+  .swatch {
+    display: inline-block; width: 22px; height: 22px;
+    border-radius: 50%; margin: 0 4px; vertical-align: middle;
+    border: 2px solid #666;
+  }
+  .swatch.on { border-color: #fff; }
+</style>
+</head>
+<body>
+<div id="clock">
+  <div id="center">
+    <div id="time"><span class="card" id="h1">0<div class="split"></div></span><span class="card" id="h2">0<div class="split"></div></span><span class="colon" id="colon">:</span><span class="card" id="m1">0<div class="split"></div></span><span class="card" id="m2">0<div class="split"></div></span><span id="ampm"></span></div>
+    <div id="date"></div>
+  </div>
+  <div id="seconds"></div>
+  <div id="hint">Tap screen for settings</div>
+  <button id="lockBtn" type="button">&#128274;</button>
+  <div id="controls">
+    <div class="row">
+      <span class="label">Hours</span>
+      <button id="btn24" type="button">24-hour</button><button id="btn12" type="button">12-hour</button>
+    </div>
+    <div class="row">
+      <span class="label">Color</span>
+      <span class="swatch on" id="sw-white" style="background:#ffffff"></span><span class="swatch" id="sw-amber" style="background:#ffb000"></span><span class="swatch" id="sw-green" style="background:#33ff66"></span><span class="swatch" id="sw-cyan" style="background:#33ccff"></span><span class="swatch" id="sw-red" style="background:#ff4444"></span>
+    </div>
+    <div class="row">
+      <span class="label">Font</span>
+      <button id="fontSans" type="button">Sans</button><button id="fontSerif" type="button">Serif</button><button id="fontMono" type="button">Mono</button>
+    </div>
+    <div class="row">
+      <button id="btnLock" type="button">Lock controls</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var state = { hours24: true, theme: 'white', font: 'sans', locked: false, controlsVisible: false };
+  var THEMES = { white: '#ffffff', amber: '#ffb000', green: '#33ff66', cyan: '#33ccff', red: '#ff4444' };
+  var FONTS = {
+    sans: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    serif: 'Georgia, "Times New Roman", serif',
+    mono: '"Courier New", Courier, monospace'
+  };
+  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function tick() {
+    var now = new Date();
+    var h = now.getHours();
+    var ampm = '';
+    if (!state.hours24) {
+      ampm = h >= 12 ? ' PM' : ' AM';
+      h = h % 12;
+      if (h === 0) { h = 12; }
+    }
+    var hs = pad(h);
+    var ms = pad(now.getMinutes());
+    var ss = pad(now.getSeconds());
+    $('h1').firstChild.nodeValue = hs.charAt(0);
+    $('h2').firstChild.nodeValue = hs.charAt(1);
+    $('m1').firstChild.nodeValue = ms.charAt(0);
+    $('m2').firstChild.nodeValue = ms.charAt(1);
+    $('ampm').innerHTML = ampm;
+    $('seconds').innerHTML = ':' + ss;
+    $('colon').style.visibility = (now.getSeconds() % 2 === 0) ? 'visible' : 'hidden';
+    $('date').innerHTML = DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+  }
+
+  function applyTheme() {
+    var color = THEMES[state.theme];
+    var cards = document.getElementsByClassName('card');
+    for (var i = 0; i < cards.length; i++) { cards[i].style.color = color; }
+    $('colon').style.color = color;
+    var swatches = document.getElementsByClassName('swatch');
+    for (var j = 0; j < swatches.length; j++) { swatches[j].className = 'swatch'; }
+    $('sw-' + state.theme).className = 'swatch on';
+  }
+
+  function applyFont() {
+    document.body.style.fontFamily = FONTS[state.font];
+    $('fontSans').className = state.font === 'sans' ? 'on' : '';
+    $('fontSerif').className = state.font === 'serif' ? 'on' : '';
+    $('fontMono').className = state.font === 'mono' ? 'on' : '';
+  }
+
+  function applyHours() {
+    $('btn24').className = state.hours24 ? 'on' : '';
+    $('btn12').className = state.hours24 ? '' : 'on';
+  }
+
+  function showControls() {
+    if (state.locked) { return; }
+    state.controlsVisible = true;
+    $('controls').style.display = 'block';
+    $('hint').style.display = 'none';
+  }
+  function hideControls() {
+    state.controlsVisible = false;
+    $('controls').style.display = 'none';
+  }
+
+  $('clock').onclick = function (e) {
+    if (state.locked) { return; }
+    var t = e.target;
+    if (t.id === 'controls' || t.parentNode.id === 'controls' || t.parentNode.parentNode.id === 'controls') { return; }
+    if (state.controlsVisible) { hideControls(); } else { showControls(); }
+  };
+
+  $('btn24').onclick = function () { state.hours24 = true; applyHours(); tick(); };
+  $('btn12').onclick = function () { state.hours24 = false; applyHours(); tick(); };
+
+  $('sw-white').onclick = function () { state.theme = 'white'; applyTheme(); };
+  $('sw-amber').onclick = function () { state.theme = 'amber'; applyTheme(); };
+  $('sw-green').onclick = function () { state.theme = 'green'; applyTheme(); };
+  $('sw-cyan').onclick = function () { state.theme = 'cyan'; applyTheme(); };
+  $('sw-red').onclick = function () { state.theme = 'red'; applyTheme(); };
+
+  $('fontSans').onclick = function () { state.font = 'sans'; applyFont(); };
+  $('fontSerif').onclick = function () { state.font = 'serif'; applyFont(); };
+  $('fontMono').onclick = function () { state.font = 'mono'; applyFont(); };
+
+  $('btnLock').onclick = function () {
+    state.locked = true;
+    hideControls();
+    $('lockBtn').style.display = 'block';
+  };
+  $('lockBtn').onclick = function (e) {
+    e.stopPropagation();
+    state.locked = false;
+    $('lockBtn').style.display = 'none';
+    showControls();
+  };
+
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+  setTimeout(function () { $('hint').style.display = 'none'; }, 5000);
+
+  applyTheme();
+  applyFont();
+  applyHours();
+  setInterval(tick, 250);
+  tick();
+})();
+</script>
+</body>
+</html>
