@@ -17,69 +17,59 @@
   }
   #clock { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
-  /* Centered time + date block */
+  /* Centered date + cards block */
   #center {
     position: absolute; top: 50%; left: 0; width: 100%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
     text-align: center;
   }
+  #date {
+    margin-bottom: 2.6vw;
+    font-size: 2.8vw;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: #fff;
+  }
   #time { white-space: nowrap; }
   .card {
     display: inline-block;
     position: relative;
-    width: 19vw;
-    height: 36vw;
-    line-height: 36vw;
-    font-size: 30vw;
-    font-weight: 300;
+    width: 26vw;
+    height: 30vw;
+    line-height: 30vw;
+    font-size: 22vw;
+    font-weight: 700;
     text-align: center;
     vertical-align: top;
-    margin: 0 0.6vw;
+    margin: 0 1vw;
     color: #fff;
-    background: #1a1a1a;
-    background: -webkit-linear-gradient(top, #2b2b2b 0%, #0d0d0d 48%, #000000 52%, #202020 100%);
-    background: linear-gradient(to bottom, #2b2b2b 0%, #0d0d0d 48%, #000000 52%, #202020 100%);
+    background: #202020;
+    background: -webkit-linear-gradient(top, #262626 0%, #1a1a1a 48%, #101010 52%, #1e1e1e 100%);
+    background: linear-gradient(to bottom, #262626 0%, #1a1a1a 48%, #101010 52%, #1e1e1e 100%);
     border: 1px solid #2c2c2c;
-    border-radius: 1.5vw;
+    border-radius: 1.6vw;
     box-shadow: 0 1vw 3vw rgba(0,0,0,0.9);
     overflow: hidden;
   }
   .card .split {
     position: absolute; left: 0; top: 50%;
-    width: 100%; height: 2px; margin-top: -1px;
+    width: 100%; height: 3px; margin-top: -1px;
     background: #000;
   }
-  .colon {
-    display: inline-block;
-    width: 5vw;
-    font-size: 30vw;
-    line-height: 36vw;
-    vertical-align: top;
-    text-align: center;
+  #seconds {
+    position: absolute; right: 1.4vw; bottom: 1vw;
+    font-size: 4vw;
+    line-height: 1;
+    font-weight: 600;
     color: #fff;
   }
   #ampm {
-    display: inline-block;
-    font-size: 6vw;
+    position: absolute; left: 1.4vw; bottom: 1vw;
+    font-size: 3.4vw;
     line-height: 1;
-    vertical-align: top;
-    margin-top: 3vw;
-    margin-left: 1vw;
-    color: #999;
-  }
-  #date {
-    margin-top: 3.5vw;
-    font-size: 4.2vw;
-    letter-spacing: 0.06em;
+    font-weight: 500;
     color: #bbb;
-  }
-
-  /* Live seconds, bottom-right */
-  #seconds {
-    position: absolute; right: 4vw; bottom: 2.5vw;
-    font-size: 6vw;
-    color: #999;
   }
 
   /* Hint shown briefly on load */
@@ -125,10 +115,9 @@
 <body>
 <div id="clock">
   <div id="center">
-    <div id="time"><span class="card" id="h1">0<div class="split"></div></span><span class="card" id="h2">0<div class="split"></div></span><span class="colon" id="colon">:</span><span class="card" id="m1">0<div class="split"></div></span><span class="card" id="m2">0<div class="split"></div></span><span id="ampm"></span></div>
     <div id="date"></div>
+    <div id="time"><div class="card" id="hoursCard"><span id="h1">0</span><span id="h2">0</span><div class="split"></div><span id="ampm"></span></div><div class="card" id="minsCard"><span id="m1">0</span><span id="m2">0</span><div class="split"></div><span id="seconds"></span></div></div>
   </div>
-  <div id="seconds"></div>
   <div id="hint">Tap screen for settings</div>
   <button id="lockBtn" type="button">&#128274;</button>
   <div id="controls">
@@ -159,7 +148,6 @@
     mono: '"Courier New", Courier, monospace'
   };
   var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   function $(id) { return document.getElementById(id); }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -169,7 +157,7 @@
     var h = now.getHours();
     var ampm = '';
     if (!state.hours24) {
-      ampm = h >= 12 ? ' PM' : ' AM';
+      ampm = h >= 12 ? 'PM' : 'AM';
       h = h % 12;
       if (h === 0) { h = 12; }
     }
@@ -181,16 +169,14 @@
     $('m1').firstChild.nodeValue = ms.charAt(0);
     $('m2').firstChild.nodeValue = ms.charAt(1);
     $('ampm').innerHTML = ampm;
-    $('seconds').innerHTML = ':' + ss;
-    $('colon').style.visibility = (now.getSeconds() % 2 === 0) ? 'visible' : 'hidden';
-    $('date').innerHTML = DAYS[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+    $('seconds').innerHTML = ss;
+    $('date').innerHTML = pad(now.getMonth() + 1) + '.' + pad(now.getDate()) + ' ' + DAYS[now.getDay()].toUpperCase();
   }
 
   function applyTheme() {
     var color = THEMES[state.theme];
     var cards = document.getElementsByClassName('card');
     for (var i = 0; i < cards.length; i++) { cards[i].style.color = color; }
-    $('colon').style.color = color;
     var swatches = document.getElementsByClassName('swatch');
     for (var j = 0; j < swatches.length; j++) { swatches[j].className = 'swatch'; }
     $('sw-' + state.theme).className = 'swatch on';
